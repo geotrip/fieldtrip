@@ -147,6 +147,8 @@ var geojson = {
 };
 
 
+
+
 //generate map as mapboxgl, set the starting style
 var map = new mapboxgl.Map({
     container: 'map',
@@ -226,8 +228,12 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
 }
 
 
-//redraw on mousemove, a hacky way to ensure layers refresh when background style is changed, i.e. from basic to sattelite. 
+//redraw on mousemove, a hacky way to ensure layers refresh when background style is changed, i.e. from basic to sattelite.
+
 map.on('mousemove', function () {
+   
+
+
     map.addSource('progPoly', {
         'type': 'geojson',
         'data': 
@@ -357,20 +363,112 @@ map.on('mousemove', function () {
         }
         }
 );
-});
 
-//needs poly centroids to label
-map.addLayer({
-        "id": "labels",
+ map.addSource("points", {
+        "type": "geojson",
+        "data": {
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.979429, -38.687555]
+                },
+                "properties": {
+                    "age": "0 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.973502, -38.678670]
+                },
+                "properties": {
+                    "age": "1 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.970297, -38.673131]
+                },
+                "properties": {
+                    "age": "2 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.965087, -38.666965]
+                },
+                "properties": {
+                    "age": "3 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.956933, -38.656721]
+                },
+                "properties": {
+                    "age": "4 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.949314, -38.644069]
+                },
+                "properties": {
+                    "age": "5 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.938508, -38.624282]
+                },
+                "properties": {
+                    "age": "6 ka",
+                    
+                }
+            },{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [177.922029, -38.579056]
+                },
+                "properties": {
+                    "age": "7 ka",
+                    
+                }
+            }]
+        }
+    });
+
+    map.addLayer({
+        "id": "points",
         "type": "symbol",
-        "source": "progPoly",
+        "source": "points",
         "layout": {
-            "text-field": "{AGE}",
+
+            "text-field": "{age}",
             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 15,
+
             "text-anchor": "top"
         }
-     });
+    });
+});
+
+
+
+
 </script>
 </body>
 </html>
