@@ -110,7 +110,7 @@ var geojson = {
         {
             "type": "Feature",
             "properties": {
-                "description": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002928\" target=\"_blank\"><strong>Coastal progradation and sediment partitioning in the Holocene Waipaoa Sedimentary System, New Zealand</strong><p></a>Over the late Holocene highstand, the shoreline at Poverty Bay, NZ migrated 12 km seaward, fed by sediment from the Waipaoa river. Paleo-shorelines indicate steadily decelerating progradation, possibly signaling changes in forcing on the Waipaoa Sedimentary System.</p>",
+                "description": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002928\" target=\"_blank\"><strong>Coastal progradation and sediment partitioning in the Holocene Waipaoa Sedimentary System, New Zealand</strong><p></a>Over the late Holocene highstand, the shoreline at Poverty Bay, NZ migrated 12 km seaward, fed by sediment from the Waipaoa river. Paleo-shorelines indicate steadily decelerating progradation, possibly signaling changes in forcing on the Waipaoa Sedimentary System.<br>The progradational history of this enviroment is shown on the adjacent map.</p>",
                     "title": "Coastal progradation and sediment partitioning in the Holocene Waipaoa Sedimentary System, New Zealand",
                     "icon": 'url(images/pdf-flat.png)'
             },
@@ -143,6 +143,18 @@ var geojson = {
                 "coordinates": [177.96,-38.72]
             }
         },
+        {
+                    "type": "Feature",
+            "properties": {
+                "description": "<a href=\"http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2117.2007.00325.x/abstract\" target=\"_blank\"><strong>Controls on sediment export from the Waipaoa River basin, New Zealand</strong><a/><p>A stability model of drainage basin mass balance is used to interpret historic and prehistoric patterns of sediment production, storage and output from the Waipaoa River basin, New Zealand and assess the sensitivity of basin sedimentyield to land use change in the historic period. Climate and vegetation cover changed during the late Holocene, but the drainage basin mass balance systemwas stable before the basin was deforested by European colonists in the late19th and early 20th centuries. In this meso-scale dispersal system sediment sources and sinks are closely linked, and before that time there was also little variability in the rate of terrigenous mass accumulation on the adjacent continental shelf. </p>",
+                "title": "Controls on sediment export from the Waipaoa River basin, New Zealand",
+                "icon": 'url(images/pdf-flat.png)'
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [178.1717,-38.81778]
+            }
+        }
         ]
 };
 
@@ -369,16 +381,6 @@ map.on('mousemove', function () {
         "data": {
             "type": "FeatureCollection",
             "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [177.979429, -38.687555]
-                },
-                "properties": {
-                    "age": "0 ka",
-                    
-                }
-            },{
                 "type": "Feature",
                 "geometry": {
                     "type": "Point",
