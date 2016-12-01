@@ -189,7 +189,8 @@ for (var i = 0; i < inputs.length; i++) {
 geojson.features.forEach(function(marker) {
     //add popups to each marker instance, otherwise you only get one popup
     var popup = new mapboxgl.Popup({offset:[0, -30]})
-    .setHTML('<h2>' + marker.properties.title + '</h2><img src="' + marker.properties.image + '" alt="">' + '<br><p>' + marker.properties.description + '</p>');
+    //organise what is shown in the popup
+    .setHTML('<h2>' + marker.properties.title + '</h2><img src="' + marker.properties.image + '" style="border: 0px solid ; width: 100%; alt="">' + '<br><p>' + marker.properties.description + '</p>');
     // create a DOM element for the marker
     var el = document.createElement('div');
     el.className = 'marker';
