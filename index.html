@@ -15,7 +15,7 @@
 
 <style>
 .mapboxgl-popup {
-        max-width: 30%;
+        max-width: 400px;
         font: 12px/20px 'Open Sans', sans-serif;
     }
 .marker {
@@ -30,9 +30,19 @@
         background: #fff;
         color: #404040;
         padding: 10px;
-        border: 1px solid rgba(0,0,0,0.4);
-        font-family: 'Open Sans', sans-serif;
+        border-radius: 3px;
+        top: 10px;
+        left: 10px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+        font: 12px/20px 'Open Sans', sans-serif;        
+        width: 200px;
     }
+
+#menu h4 {
+    margin: 0 0 10px;
+    font: 20px 'Open Sans', sans-serif;
+}
+
 .legend {
     background-color: #fff;
     border-radius: 3px;
@@ -42,12 +52,12 @@
     padding: 10px;
     position: absolute;
     right: 10px;
-    top:50%
     z-index: 1;
 }
 
 .legend h4 {
     margin: 0 0 10px;
+    font: 20px 'Open Sans', sans-serif;
 }
 
 .legend div p {
@@ -63,11 +73,14 @@
 </style>
 <div id='map'></div>
 <div id='menu'>
+    <h4>Instructions</h4>
+    <div>Click and drag to pan the map. Use the mouse wheel, touchpad or buttons to the right to zoom in and out. Select between a basic view and satellite imagery below.</div>
     <input id='outdoors' type='radio' name='rtoggle' value='outdoors' checked='checked'>
     <label for='outdoors'>default</label>
     <input id='satellite' type='radio' name='rtoggle' value='satellite'>
     <label for='satellite'>satellite imagery</label>
 </div>
+
 <div id='legend' class='legend'>
     <h4>Legend</h4>
     <div><img src=images/hill.svg> Hillslope</div>
@@ -388,6 +401,7 @@ map.on('mousemove', function () {
         }
 );
 
+// this is the label for the progradational age. By keeping it seperate postion can be controlled. 
  map.addSource("points", {
         "type": "geojson",
         "data": {
@@ -481,8 +495,8 @@ map.on('mousemove', function () {
 });
 
 
-
-
+//this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
+map.addControl(new mapboxgl.NavigationControl());
 </script>
 </body>
 </html>
