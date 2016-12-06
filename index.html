@@ -55,7 +55,7 @@
     .filter-group {
         font: 12px/20px 'Open Sans', sans-serif;
         position: absolute;
-        bottom: 1%;
+        bottom: 25px;
         right: 10px;
         z-index: 1;
         border-radius: 3px;
@@ -114,7 +114,7 @@ var journals = {
             "info": "H. Ogawa, M.E. Dickson, P.S. Kench",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0278434311001683\" target=\"_blank\">Link to article</a>",
             "title": "Wave transformation on a sub-horizontal shore platform, Tatapouri, North Island, New Zealand",
-            "icon": "coast"
+            "icon": "coastal"
         },
         "geometry": {
             "type": "Point",
@@ -127,7 +127,7 @@ var journals = {
             "info":"M.A. Wolinsky, J.B. Swenson, N. Litchfield, J.E. McNinch",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002928\" target=\"_blank\">Link to article</a>",
             "title": "Coastal progradation and sediment partitioning in the Holocene Waipaoa Sedimentary System, New Zealand",
-            "icon": "coast"
+            "icon": "coastal"
         },
         "geometry": {
             "type": "Point",
@@ -140,7 +140,7 @@ var journals = {
             "info": "Ian C. Fuller, Mike Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002667\" target=\"_blank\">Link to article</a>",
             "title": "Rapid channel response to variability in sediment supply: Cutting and filling of the Tarndale Fan, Waipaoa catchment, New Zealand",
-            "icon": "hill"
+            "icon": "hillslope"
         },
         "geometry": {
             "type": "Point",
@@ -153,7 +153,7 @@ var journals = {
             "info": "Aaron J. Bever, Jesse E. McNinch, Courtney K. Harrisa",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0278434310003705\" target=\"_blank\">Link to article</a>", 
             "title": "Hydrodynamics and sediment-transport in the nearshore of Poverty Bay, New Zealand: Observations of nearshore sediment segregation and oceanic storms",
-            "icon": "coast"
+            "icon": "coastal"
         },
         "geometry": {
             "type": "Point",
@@ -166,7 +166,7 @@ var journals = {
             "info": "Ian C. Fuller, Mike Marden <br><a href=\"http://images2.pics4learning.com/catalog/i/img_3051.jpg\"><img src= 'images/tarn.jpg'></a>",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0169555X10005490\" target=\"_blank\">Link to article</a>",
                 "title": "Slope–channel coupling in steepland terrain: A field-based conceptual model from the Tarndale gully and fan, Waipaoa catchment, New Zealand",
-            "icon": "hill"
+            "icon": "hillslope"
         },
         "geometry": {
             "type": "Point",
@@ -179,7 +179,7 @@ var journals = {
             "info": "Kathleen M. Marsaglia, Alissa M. DeVaughn, Dawn E. James, Michael Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002886\" target=\"_blank\">Link to article</a>",
             "title": "Provenance of fluvial terrace sediments within the Waipaoa sedimentary system and their importance to New Zealand source-to-sink studies",
-            "icon": 'river'
+            "icon": 'fluvial'
             },
             "geometry": {
                 "type": "Point",
@@ -193,7 +193,7 @@ var journals = {
                 "info": "Jonathan D. Phillips and Basil Gomez<br><img src= 'images/terr.PNG'>",
                 "link": "<a href=\"http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2117.2007.00325.x/abstract\" target=\"_blank\">Link to article</a>",
                 "title": "Controls on sediment export from the Waipaoa River basin, New Zealand",
-                "icon": 'river'
+                "icon": 'fluvial'
             },
             "geometry": {
                 "type": "Point",
@@ -205,7 +205,7 @@ var journals = {
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwcu8n8y00052qoioe0fw74p',
+    style: 'mapbox://styles/andrew84555/ciwd6v22v00102ql7c5r56anu',
     center: [177.8664, - 38.4695],
     zoom: 9.5
 });
@@ -224,7 +224,7 @@ map.on('load', function() {
     });
     map.addSource('Hillshade', {
         type: 'raster',
-        url: 'mapbox://andrew84555.2aw4rt7f',
+        url: 'mapbox://andrew84555.dbi3jdze',
         tileSize: 256
     });
     map.addLayer({
@@ -281,7 +281,7 @@ map.on('load', function() {
 
 
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-river', 'poi-coast', 'poi-hill'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope'] });
 
     if (!features.length) {
         return;
@@ -300,7 +300,7 @@ map.on('click', function (e) {
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
 map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-river', 'poi-coast', 'poi-hill'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 
