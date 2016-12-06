@@ -14,12 +14,16 @@
 <body>
 
 <style>
+    .mapboxgl-popup {
+        max-width: 400px;
+        font: 12px/20px 'Open Sans', sans-serif;
+    }
     #menu {
         background: #fff;
         position: absolute;
         z-index: 1;
         top: 1%;
-        right: 10px;
+        left: 10px;
         border-radius: 3px;
         width: 120px;        
         font-family: 'Open Sans', sans-serif;
@@ -51,8 +55,8 @@
     .filter-group {
         font: 12px/20px 'Open Sans', sans-serif;
         position: absolute;
-        top: 1%;
-        left: 10px;
+        bottom: 1%;
+        right: 10px;
         z-index: 1;
         border-radius: 3px;
         width: 120px;
@@ -168,14 +172,14 @@ var journals = {
             "type": "Point",
             "coordinates": [177.790659,-38.242552]
         }
-    },         {
-            "type": "Feature",
-            "properties": {
-                "description": "Late Pleistocene fluvial terrace deposits within the Waipaoa River system of North Island, New Zealand provide some insight into the fluvial history of the region that can be potentially translated to the marine sedimentary record. Pebble counts and sand detrital modes from terrace remnants suggest significant compositional differences between these terraces and the modern stream deposits. The terrace deposits are enriched in sandstone lithics (sand and gravel), as well as monomineralic quartz and feldspar (sand). In contrast, the modern Waipaoa River is dominated by mudstone fragments, mainly products of gullying in the Waipaoa River headwaters region.",
-                "info": "Kathleen M. Marsaglia, Alissa M. DeVaughn, Dawn E. James, Michael Marden",
-                "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002886\" target=\"_blank\">Link to article</a>",
-                "title": "Provenance of fluvial terrace sediments within the Waipaoa sedimentary system and their importance to New Zealand source-to-sink studies",
-                "icon": 'river'
+    },       {
+        "type": "Feature",
+        "properties": {
+            "description": "Late Pleistocene fluvial terrace deposits within the Waipaoa River system of North Island, New Zealand provide some insight into the fluvial history of the region that can be potentially translated to the marine sedimentary record. Pebble counts and sand detrital modes from terrace remnants suggest significant compositional differences between these terraces and the modern stream deposits. The terrace deposits are enriched in sandstone lithics (sand and gravel), as well as monomineralic quartz and feldspar (sand). In contrast, the modern Waipaoa River is dominated by mudstone fragments, mainly products of gullying in the Waipaoa River headwaters region.",
+            "info": "Kathleen M. Marsaglia, Alissa M. DeVaughn, Dawn E. James, Michael Marden",
+            "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002886\" target=\"_blank\">Link to article</a>",
+            "title": "Provenance of fluvial terrace sediments within the Waipaoa sedimentary system and their importance to New Zealand source-to-sink studies",
+            "icon": 'river'
             },
             "geometry": {
                 "type": "Point",
@@ -206,6 +210,7 @@ var map = new mapboxgl.Map({
     zoom: 9.5
 });
 
+
 map.on('load', function() {
     // Add a GeoJSON source containing place coordinates and information.
     map.addSource("journals", {
@@ -219,7 +224,7 @@ map.on('load', function() {
     });
     map.addSource('Hillshade', {
         type: 'raster',
-        url: 'mapbox://andrew84555.dbi3jdze',
+        url: 'mapbox://andrew84555.2aw4rt7f',
         tileSize: 256
     });
     map.addLayer({
@@ -274,6 +279,32 @@ map.on('load', function() {
     });
 });
 
+
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-river', 'poi-coast', 'poi-hill'] });
+
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    var popup = new mapboxgl.Popup()
+        .setLngLat(feature.geometry.coordinates)
+        .setHTML('<h2 ALIGN=center>' + feature.properties.title + '</h2><P ALIGN=center><i>' + feature.properties.info + '<br></i>'+ feature.properties.link + '</p><p>'+ feature.properties.description + '</p>')
+        .addTo(map);
+});
+
+// Use the same approach as above to indicate that the symbols are clickable
+// by changing the cursor style to 'pointer'.
+map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-river', 'poi-coast', 'poi-hill'] });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+});
+
+
 var toggleableLayerIds = [ 'DigitialGlobe Imagery', 'Hillshade'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
@@ -303,6 +334,14 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
     var layers = document.getElementById('menu');
     layers.appendChild(link);
 }
+
+
+
+
+
+
+//this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
+map.addControl(new mapboxgl.NavigationControl());
 </script>
 
 </body>
