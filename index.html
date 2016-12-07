@@ -239,11 +239,46 @@ map.on('load', function() {
     });
     map.addLayer({
         'id': 'Hillshade',
-        'type': 'raster',
-        'source': 'Hillshade',
+        'type': 'image',
+        'url': 'Hillshade',
         'source-layer': 'Hillshade',
 
     });
+
+    var frameCount = 8;
+    for (var i = 0; i < frameCount; i++) {
+        map.addSource('prog' + i, {
+            type: 'image',
+            url: 'images/' + i + 'a.gif',
+            coordinates: [
+                [177.812861519, -38.562933925],
+                [178.128957046, -38.562933925],
+                [178.128957046, -38.765719368],
+                [177.812861519, -38.765719368]
+            ]
+        });
+
+        map.addLayer({
+            id: 'prog' + i,
+            source: 'prog' + i,
+            type: 'raster',
+            paint: {
+                'raster-opacity': 0,
+                'raster-opacity-transition': {
+                    duration: 1
+                }
+            }
+        });
+    }
+
+    var frame = frameCount - 1;
+    setInterval(function() {
+        map.setPaintProperty('prog' + frame, 'raster-opacity', 0);
+        frame = (frame + 1) % frameCount;
+        map.setPaintProperty('prog' + frame, 'raster-opacity', 0.8);
+    }, 500);
+
+
     journals.features.forEach(function(feature) {
         var symbol = feature.properties['icon'];
         var layerID = 'poi-' + symbol;
