@@ -17,6 +17,37 @@
     .mapboxgl-popup {
         max-width: 400px;
         font: 12px/20px 'Open Sans', sans-serif;
+        z-index: 1
+    }
+    .map-overlay {
+    font: 12px/20px 'Open Sans', sans-serif;
+    position: absolute;
+    width: 250px;
+    top: 100px;
+    left: 0;
+    padding: 10px;
+    }
+
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .map-overlay label {
+        display: block;
+        margin: 0 0 10px;
+    }
+
+    .map-overlay input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin: 0;
+        cursor: ew-resize;
     }
     #menu {
         background: #fff;
@@ -25,7 +56,7 @@
         top: 1%;
         left: 10px;
         border-radius: 3px;
-        width: 120px;        
+        width: 250px;        
         font-family: 'Open Sans', sans-serif;
     }
 
@@ -101,10 +132,17 @@
         content: '✔';
         margin-right: 5px;
     }
+
 </style>
 <nav id="menu"></nav>
 <div id='map'></div>
 <nav id='filter-group' class='filter-group'></nav>
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <label>Hillshade overlay opacity: <span id='slider-value'>100%</span></label>
+        <input id='slider' type='range' min='0' max='100' step='0' value='100' />
+    </div>
+</div>
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
@@ -212,6 +250,9 @@ var map = new mapboxgl.Map({
     center: [177.8664, - 38.4695],
     zoom: 9.5
 });
+var slider = document.getElementById('slider');
+var sliderValue = document.getElementById('slider-value');
+
 
 
 map.on('load', function() {
@@ -225,11 +266,6 @@ map.on('load', function() {
         url: 'mapbox://mapbox.satellite',
         tileSize: 256
     });
-    map.addSource('Hillshade', {
-        type: 'raster',
-        url: 'mapbox://andrew84555.dbi3jdze',
-        tileSize: 256
-    });
     map.addLayer({
         'id': 'DigitialGlobe Imagery',
         'type': 'raster',
@@ -237,13 +273,33 @@ map.on('load', function() {
         'source-layer': 'DigitialGlobe Imagery',
 
     });
-    map.addLayer({
-        'id': 'Hillshade',
-        'type': 'image',
-        'url': 'Hillshade',
-        'source-layer': 'Hillshade',
+    map.addSource('Teweraroa Hillshade', {
+            type: 'image',
+            url: 'images/tew.png',
+            coordinates: [
+                [177.776287985, -38.2290912571],
+                [177.870732727, -38.2290912571],
+                [177.870732727, -38.2926082213],
+                [177.776287985, -38.2926082213]
+            ]
+        });
 
+    map.addLayer({
+            id: 'Teweraroa Hillshade',
+            source: 'Teweraroa Hillshade',
+            type: 'raster',
+        });
+
+    slider.addEventListener('input', function(e) {
+        // Adjust the layers opacity. layer here is arbitrary - this could
+        // be another layer name found in your style or a custom layer
+        // added on the fly using `addSource`.
+    map.setPaintProperty('Teweraroa Hillshade', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+
+        // Value indicator
+        sliderValue.textContent = e.target.value + '%';
     });
+
 
     var frameCount = 8;
     for (var i = 0; i < frameCount; i++) {
@@ -275,10 +331,8 @@ map.on('load', function() {
     setInterval(function() {
         map.setPaintProperty('prog' + frame, 'raster-opacity', 0);
         frame = (frame + 1) % frameCount;
-        map.setPaintProperty('prog' + frame, 'raster-opacity', 0.8);
+        map.setPaintProperty('prog' + frame, 'raster-opacity', 1);
     }, 500);
-
-
     journals.features.forEach(function(feature) {
         var symbol = feature.properties['icon'];
         var layerID = 'poi-' + symbol;
@@ -333,6 +387,7 @@ map.on('click', function (e) {
         .setLngLat(feature.geometry.coordinates)
         .setHTML('<h2 ALIGN=center>' + feature.properties.title + '</h2><P ALIGN=center><i>' + feature.properties.info + '<br></i>'+ feature.properties.link + '</p><p>'+ feature.properties.description + '</p>')
         .addTo(map);
+
 });
 
 // Use the same approach as above to indicate that the symbols are clickable
@@ -343,7 +398,7 @@ map.on('mousemove', function (e) {
 });
 
 
-var toggleableLayerIds = [ 'DigitialGlobe Imagery', 'Hillshade'];
+var toggleableLayerIds = [ 'DigitialGlobe Imagery', 'Teweraroa Hillshade'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
@@ -372,11 +427,6 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
     var layers = document.getElementById('menu');
     layers.appendChild(link);
 }
-
-
-
-
-
 
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
