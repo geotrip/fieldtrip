@@ -122,22 +122,22 @@ var map = new mapboxgl.Map({
 
 map.on('load', function() {
     // Add a GeoJSON source containing place coordinates and information.
-    map.addSource('DigitialGlobe Imagery', {
+    map.addSource('LINZ Aerial Imagery', {
         type: 'raster',
-        url: 'mapbox://mapbox.satellite',
+        url: 'mapbox://andrew84555.2wqkmrna',
         tileSize: 256
     });
     map.addLayer({
-        'id': 'DigitialGlobe Imagery',
+        'id': 'LINZ Aerial Imagery',
         'type': 'raster',
-        'source': 'DigitialGlobe Imagery',
-        'source-layer': 'DigitialGlobe Imagery',
+        'source': 'LINZ Aerial Imagery',
+        'source-layer': 'LINZ Aerial Imagery',
 
     });        
 
 });
 
-var toggleableLayerIds = [ 'DigitialGlobe Imagery'];
+var toggleableLayerIds = [ 'LINZ Aerial Imagery'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
