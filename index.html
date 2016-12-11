@@ -272,7 +272,8 @@ map.on('load', function() {
         'source': 'DigitialGlobe Imagery',
         'source-layer': 'DigitialGlobe Imagery',
 
-    });        
+    });
+    map.setLayerZoomRange('DigitialGlobe Imagery', 12, 20);        
     map.addSource('Beach Ridges', {
          type: 'image',
          url: 'images/rid.png',
