@@ -19,11 +19,24 @@
         font: 12px/20px 'Open Sans', sans-serif;
         z-index: 1
     }
+    #info {
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 50%;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #222;
+        background: #fff;
+    }
     .map-overlay {
 	    font: 12px/20px 'Open Sans', sans-serif;
 	    position: absolute;
 	    width: 250px;
-	    top: 150px;
+	    top: 200px;
 	    left: 0;
 	    padding: 10px;
     }
@@ -135,10 +148,11 @@
 </style>
 <nav id="menu"></nav>
 <div id='map'></div>
+<pre id='info'></pre>
 <nav id='filter-group' class='filter-group'></nav>
 <div class='map-overlay top'>
     <div class='map-overlay-inner'>
-        <label>Hillshade overlay opacity: <span id='slider-value'>100%</span></label>
+        <label>LIDAR overlay opacity: <span id='slider-value'>100%</span></label>
         <input id='slider' type='range' min='0' max='100' step='0' value='100' />
     </div>
 </div>
@@ -161,6 +175,33 @@ var journals = {
             "coordinates": [178.14901,-38.642099]
         }
     }, {
+        "type": "Feature",
+        "properties": {
+            "description": "The combination of high sediment yields and the prevalence of tectonically controlled accommodation on collision margins such as that adjacent to the Waipaoa River, NZ, create the potential for these areas to contain high-resolution records of natural and anthropogenic signals. This study describes modern (100-yr) sedimentation patterns off the Waipaoa and quantifies a sediment budget for the continental shelf, which is compared to long-term Holocene trends.",
+            "info": "Andrea J. Miller, Steven A. Kuehl",
+            "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002898\" target=\"_blank\">Link to article</a>",
+            "title": "Shelf sedimentation on a tectonically active margin: A modern sediment budget for Poverty continental shelf, New Zealand",
+            "icon": "coastal"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [178.120462,-38.852139]
+        }
+    },{
+        "type": "Feature",
+        "properties": {
+            "description": "The Poverty margin was sampled in 2005 and 2006 as part of an international initiative to examine the terrestrial and marine sedimentary response to natural and human impacts on dispersal systems at muddominated coasts: the NSF MARGINS Source-to-Sink Initiative. ",
+            "info": "C.R. Alexander, J.P. Walsh, A.R. Orpin",
+            "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002862\" target=\"_blank\">Link to article</a>",
+            "title": "Modern sediment dispersal and accumulation on the outer Poverty continental margin",
+            "icon": "coastal"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [178.212975,-38.940677]
+        }
+    },
+    {
         "type": "Feature",
         "properties": {
         	"description": "Over the late Holocene highstand, the shoreline at Poverty Bay, NZ migrated 12 km seaward, fed by sediment from the Waipaoa river. Paleo-shorelines indicate steadily decelerating progradation, possibly signaling changes in forcing on the Waipaoa Sedimentary System.<br>The progradational history of this enviroment is shown to the right.",
@@ -199,11 +240,25 @@ var journals = {
             "type": "Point",
             "coordinates": [177.96,-38.72]
         }
-    }, {
+    },{
+        "type": "Feature",
+        "properties": {
+            "description": "<a href=\"http://images2.pics4learning.com/catalog/i/img_3051.jpg\"><img src= 'images/tarn.jpg'></a>",
+            "info": "",
+            "link": "", 
+            "title": "",
+            "icon": "photo"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [177.78905,-38.2409]
+        }
+    },  
+    {
         "type": "Feature",
         "properties": {
             "description": "Connectivity between an actively eroding gully complex and upper Waipaoa catchment via a steep, 1-kmlong alluvial fan is assessed using digital elevation models (DEMs) of the Tarndale fan derived from 10 high resolution GPS surveys between 2004 and 2008. Repeat DEM analysis provides a means of assessing transfer of sediment supplied from the Tarndale gully through the fan to the Te Weraroa Stream and thus inferring connectivity between these landscape components from which a conceptual coupling model is derived.",
-            "info": "Ian C. Fuller, Mike Marden <br><a href=\"http://images2.pics4learning.com/catalog/i/img_3051.jpg\"><img src= 'images/tarn.jpg'></a>",
+            "info": "Ian C. Fuller, Mike Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0169555X10005490\" target=\"_blank\">Link to article</a>",
                 "title": "Slope–channel coupling in steepland terrain: A field-based conceptual model from the Tarndale gully and fan, Waipaoa catchment, New Zealand",
             "icon": "hillslope"
@@ -227,10 +282,10 @@ var journals = {
             }
 
     },        {
-                    "type": "Feature",
-            "properties": {
+        "type": "Feature",
+        "properties": {
                 "description": "A stability model of drainage basin mass balance is used to interpret historic and prehistoric patterns of sediment production, storage and output from the Waipaoa River basin, New Zealand and assess the sensitivity of basin sedimentyield to land use change in the historic period. Climate and vegetation cover changed during the late Holocene, but the drainage basin mass balance systemwas stable before the basin was deforested by European colonists in the late19th and early 20th centuries. In this meso-scale dispersal system sediment sources and sinks are closely linked, and before that time there was also little variability in the rate of terrigenous mass accumulation on the adjacent continental shelf.",
-                "info": "Jonathan D. Phillips and Basil Gomez<br><img src= 'images/terr.PNG'>",
+                "info": "Jonathan D. Phillips and Basil Gomez",
                 "link": "<a href=\"http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2117.2007.00325.x/abstract\" target=\"_blank\">Link to article</a>",
                 "title": "Controls on sediment export from the Waipaoa River basin, New Zealand",
                 "icon": 'fluvial'
@@ -245,7 +300,7 @@ var journals = {
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwd6v22v00102ql7c5r56anu',
+    style: 'mapbox://styles/andrew84555/ciwk35i8900cm2qoijjvba6hd',
     center: [177.8664, - 38.4695],
     zoom: 9.5
     //20 is zoomed in, 0 is zoomed out
@@ -261,39 +316,36 @@ map.on('load', function() {
         "type": "geojson",
         "data": journals
     });
-    map.addSource('DigitialGlobe Imagery', {
+    map.addSource('DigitalGlobe Satellite Imagery', {
         type: 'raster',
         url: 'mapbox://mapbox.satellite',
         tileSize: 256
     });
     map.addLayer({
-        'id': 'DigitialGlobe Imagery',
+        'id': 'DigitalGlobe Satellite Imagery',
         'type': 'raster',
-        'source': 'DigitialGlobe Imagery',
-        'source-layer': 'DigitialGlobe Imagery',
+        'source': 'DigitalGlobe Satellite Imagery',
+        'source-layer': 'DigitalGlobe Satellite Imagery',
 
     });
-    map.setLayerZoomRange('DigitialGlobe Imagery', 12, 20);        
-    map.addSource('Beach Ridges', {
+    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 12, 20);        
+    map.addSource('Coastal LIDAR', {
          type: 'image',
-         url: 'images/rid.png',
+         url: 'images/coast.png',
          coordinates: [
-                [177.970856637, -38.6342224799999],//top left
-                [177.995981547288, -38.6342224799999],//top right
-                [177.995981547288, -38.654952604],//bottom right
-                [177.970856637, -38.654952604]//bottom left
+                [177.910310, -38.627270],//top left
+                [178.039733, -38.627270],//top right
+                [178.039733, -38.715283],//bottom right
+                [177.910310, -38.715283]//bottom left
             ]
         });
-
-        map.addLayer({
-            id: 'Beach Ridges',
-            source: 'Beach Ridges',
+    map.addLayer({
+            id: 'Coastal LIDAR',
+            source: 'Coastal LIDAR',
             type: 'raster',
             
         });
-
-
-    map.addSource('Teweraroa Hillshade', {
+    map.addSource('Tarndale LIDAR', {
             type: 'image',
             url: 'images/tew.png',
             coordinates: [
@@ -305,8 +357,8 @@ map.on('load', function() {
         });
 
     map.addLayer({
-            id: 'Teweraroa Hillshade',
-            source: 'Teweraroa Hillshade',
+            id: 'Tarndale LIDAR',
+            source: 'Tarndale LIDAR',
             type: 'raster',
         });
 
@@ -335,9 +387,8 @@ map.on('load', function() {
         // Adjust the layers opacity. layer here is arbitrary - this could
         // be another layer name found in your style or a custom layer
         // added on the fly using `addSource`.
-    map.setPaintProperty('Teweraroa Hillshade', 'raster-opacity', parseInt(e.target.value, 10) / 100);
-    map.setPaintProperty('Beach Ridges', 'raster-opacity', parseInt(e.target.value, 10) / 100);
-    
+    map.setPaintProperty('Tarndale LIDAR', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    map.setPaintProperty('Coastal LIDAR', 'raster-opacity', parseInt(e.target.value, 10) / 100);    
 
         // Value indicator
         sliderValue.textContent = e.target.value + '%';
@@ -388,7 +439,7 @@ map.on('load', function() {
 
 
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo'] });
 
     if (!features.length) {
         return;
@@ -408,11 +459,14 @@ map.on('click', function (e) {
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
 map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope'] });
+    document.getElementById('info').innerHTML =
+            // e.lngLat is the longitude, latitude geographical position of the event
+    JSON.stringify(e.lngLat);
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 
-var toggleableLayerIds = [ 'DigitialGlobe Imagery', 'Teweraroa Hillshade', 'Beach Ridges', 'Progradational Timeline'];
+var toggleableLayerIds = [ 'DigitalGlobe Satellite Imagery', 'Tarndale LIDAR','Coastal LIDAR', 'Progradational Timeline'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
