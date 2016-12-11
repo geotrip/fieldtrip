@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+    .mapboxgl-popup {
+        max-width: 400px;
+        font: 12px/20px 'Open Sans', sans-serif;
+        z-index: 1
+    }
+    #menu {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 1%;
+        left: 10px;
+        border-radius: 3px;
+        width: 250px;        
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #menu a {
+        font-size: 12px;
+        color: #404040;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;
+        border-radius: 3px 3px 0 0;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        
+    }
+
+    #menu a:last-child {
+        border-radius: 0 0 3px 3px;
+    }
+
+
+    #menu a.active {
+        background-color: #595959;
+        color: #ffffff;        
+    }
+
+    .filter-group {
+        font: 12px/20px 'Open Sans', sans-serif;
+        position: absolute;
+        bottom: 25px;
+        right: 10px;
+        z-index: 1;
+        border-radius: 3px;
+        width: 120px;
+        color: #fff;
+    }
+
+    .filter-group input[type=checkbox]:first-child + label {
+        border-radius: 3px 3px 0 0;
+    }
+
+    .filter-group label:last-child {
+        border-radius: 0 0 3px 3px;
+        border: none;
+    }
+
+    .filter-group input[type=checkbox] {
+        display: none;
+    }
+
+    .filter-group input[type=checkbox] + label {
+        background-color: #3386c0;
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    }
+
+    .filter-group input[type=checkbox] + label {
+    	color: #404040;
+        background-color: #fff;
+        text-transform: capitalize;
+    }
+
+    .filter-group input[type=checkbox] + label:hover,
+    .filter-group input[type=checkbox]:checked + label {
+        color: #404040;
+
+    }
+
+    .filter-group input[type=checkbox]:checked + label:before {
+        color: #404040;
+        content: '✔';
+        margin-right: 5px;
+    }
+
+</style>
+<nav id="menu"></nav>
+<div id='map'></div>
+</div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
+
+
+var filterGroup = document.getElementById('filter-group');
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/andrew84555/ciwd6v22v00102ql7c5r56anu',
+    center: [175.1080, - 36.80],
+    zoom: 11
+});
+
+map.on('load', function() {
+    // Add a GeoJSON source containing place coordinates and information.
+    map.addSource('DigitialGlobe Imagery', {
+        type: 'raster',
+        url: 'mapbox://mapbox.satellite',
+        tileSize: 256
+    });
+    map.addLayer({
+        'id': 'DigitialGlobe Imagery',
+        'type': 'raster',
+        'source': 'DigitialGlobe Imagery',
+        'source-layer': 'DigitialGlobe Imagery',
+
+    });        
+
+});
+
+var toggleableLayerIds = [ 'DigitialGlobe Imagery'];
+
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+    var id = toggleableLayerIds[i];
+
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = id;
+
+    link.onclick = function (e) {
+        var clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
+
+        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+        if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.className = '';
+        } else {
+            this.className = 'active';
+            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        }
+    };
+
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+
+//this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
+map.addControl(new mapboxgl.NavigationControl());
+</script>
+
+</body>
+</html>
