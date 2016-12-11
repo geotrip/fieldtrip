@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title></title>
+    <title>330 Webmap Excercise</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
@@ -20,12 +20,12 @@
         z-index: 1
     }
     .map-overlay {
-    font: 12px/20px 'Open Sans', sans-serif;
-    position: absolute;
-    width: 250px;
-    top: 100px;
-    left: 0;
-    padding: 10px;
+	    font: 12px/20px 'Open Sans', sans-serif;
+	    position: absolute;
+	    width: 250px;
+	    top: 150px;
+	    left: 0;
+	    padding: 10px;
     }
 
     .map-overlay .map-overlay-inner {
@@ -67,8 +67,7 @@
         margin: 0;
         padding: 0;
         padding: 10px;
-        text-decoration: none;
-        border-radius: 3px 3px 0 0;
+        text-decoration: none;        
         border-bottom: 1px solid rgba(0, 0, 0, 0.25);
         
     }
@@ -249,6 +248,7 @@ var map = new mapboxgl.Map({
     style: 'mapbox://styles/andrew84555/ciwd6v22v00102ql7c5r56anu',
     center: [177.8664, - 38.4695],
     zoom: 9.5
+    //20 is zoomed in, 0 is zoomed out
 });
 var slider = document.getElementById('slider');
 var sliderValue = document.getElementById('slider-value');
@@ -272,7 +272,26 @@ map.on('load', function() {
         'source': 'DigitialGlobe Imagery',
         'source-layer': 'DigitialGlobe Imagery',
 
-    });
+    });        
+    map.addSource('Beach Ridges', {
+         type: 'image',
+         url: 'images/rid.png',
+         coordinates: [
+                [177.970856637, -38.6342224799999],//top left
+                [177.995981547288, -38.6342224799999],//top right
+                [177.995981547288, -38.654952604],//bottom right
+                [177.970856637, -38.654952604]//bottom left
+            ]
+        });
+
+        map.addLayer({
+            id: 'Beach Ridges',
+            source: 'Beach Ridges',
+            type: 'raster',
+            
+        });
+
+
     map.addSource('Teweraroa Hillshade', {
             type: 'image',
             url: 'images/tew.png',
@@ -290,23 +309,10 @@ map.on('load', function() {
             type: 'raster',
         });
 
-    slider.addEventListener('input', function(e) {
-        // Adjust the layers opacity. layer here is arbitrary - this could
-        // be another layer name found in your style or a custom layer
-        // added on the fly using `addSource`.
-    map.setPaintProperty('Teweraroa Hillshade', 'raster-opacity', parseInt(e.target.value, 10) / 100);
-
-        // Value indicator
-        sliderValue.textContent = e.target.value + '%';
-    });
-
-
-    var frameCount = 8;
-    for (var i = 0; i < frameCount; i++) {
-        map.addSource('prog' + i, {
-            type: 'image',
-            url: 'images/' + i + 'a.gif',
-            coordinates: [
+    map.addSource('Progradational Timeline', {
+        type: 'image',
+        url: 'images/7a.gif',
+        coordinates: [
                 [177.812861519, -38.562933925],
                 [178.128957046, -38.562933925],
                 [178.128957046, -38.765719368],
@@ -314,25 +320,33 @@ map.on('load', function() {
             ]
         });
 
-        map.addLayer({
-            id: 'prog' + i,
-            source: 'prog' + i,
-            type: 'raster',
-            paint: {
-                'raster-opacity': 0,
-                'raster-opacity-transition': {
-                    duration: 1
-                }
+     map.addLayer({
+        id: 'Progradational Timeline',
+        source: 'Progradational Timeline',
+        type: 'raster',
+                    paint: {
+                'raster-opacity': 0.85
             }
         });
-    }
+     map.setLayerZoomRange('Progradational Timeline', 0, 11);
 
-    var frame = frameCount - 1;
-    setInterval(function() {
-        map.setPaintProperty('prog' + frame, 'raster-opacity', 0);
-        frame = (frame + 1) % frameCount;
-        map.setPaintProperty('prog' + frame, 'raster-opacity', 1);
-    }, 500);
+    slider.addEventListener('input', function(e) {
+        // Adjust the layers opacity. layer here is arbitrary - this could
+        // be another layer name found in your style or a custom layer
+        // added on the fly using `addSource`.
+    map.setPaintProperty('Teweraroa Hillshade', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    map.setPaintProperty('Beach Ridges', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    
+
+        // Value indicator
+        sliderValue.textContent = e.target.value + '%';
+    });
+
+
+
+
+    
+
     journals.features.forEach(function(feature) {
         var symbol = feature.properties['icon'];
         var layerID = 'poi-' + symbol;
@@ -397,8 +411,7 @@ map.on('mousemove', function (e) {
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 
-
-var toggleableLayerIds = [ 'DigitialGlobe Imagery', 'Teweraroa Hillshade'];
+var toggleableLayerIds = [ 'DigitialGlobe Imagery', 'Teweraroa Hillshade', 'Beach Ridges', 'Progradational Timeline'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
@@ -427,6 +440,7 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
     var layers = document.getElementById('menu');
     layers.appendChild(link);
 }
+
 
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
