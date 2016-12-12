@@ -164,11 +164,11 @@ var journals = {
     "features": [{
         "type": "Feature",
         "properties": {
-            "description": "<iframe width=400 height=300 src= 'videos/test.mp4'>",
+            "description": "<iframe width=400 height=300 src= 'https://www.youtube.com/embed/1XLk0GgkxeU'>",
             "info": "",
             "link": "", 
             "title": "",
-            "icon": "video"
+            "icon": "youtube"
         },
         "geometry": {
             "type": "Point",
@@ -479,7 +479,7 @@ map.on('load', function() {
 
 
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-video'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-youtube'] });
 
     if (!features.length) {
         return;
@@ -502,11 +502,11 @@ map.on('mousemove', function (e) {
     document.getElementById('info').innerHTML =
             // e.lngLat is the longitude, latitude geographical position of the event
     JSON.stringify(e.lngLat);
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-video'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-youtube'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 
-var toggleableLayerIds = [ 'DigitalGlobe Satellite Imagery', 'Tarndale LIDAR', 'Coastal LIDAR', 'Progradational Timeline'];
+var toggleableLayerIds = ['DigitalGlobe Satellite Imagery', 'Tarndale LIDAR', 'Coastal LIDAR', 'Progradational Timeline'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
