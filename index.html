@@ -15,7 +15,7 @@
 
 <style>
     .mapboxgl-popup {
-        max-width: 400px;
+        max-width: 420px;
         font: 12px/20px 'Open Sans', sans-serif;
         z-index: 1
     }
@@ -164,6 +164,60 @@ var journals = {
     "features": [{
         "type": "Feature",
         "properties": {
+            "description": "<iframe width=400 height=300 src= 'videos/test.mp4'>",
+            "info": "",
+            "link": "", 
+            "title": "",
+            "icon": "video"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [177.9,-38.5]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "description": "<a href=\"images/tarn_full.jpg\"><img src= 'images/tarn.jpg'></a>",
+            "info": "",
+            "link": "", 
+            "title": "",
+            "icon": "photo"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [177.788511,-38.240911]
+        }
+    },{
+        "type": "Feature",
+        "properties": {
+            "description": "<a href=\"images/bea_full.jpg\"><img src= 'images/bea.jpg'></a>",
+            "info": "",
+            "link": "", 
+            "title": "",
+            "icon": "photo"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [178.000740420274,-38.672019638269774]
+        }
+    },{
+        "type": "Feature",
+        "properties": {
+            "description": "<a href=\"images/riv_full.jpg\"><img src= 'images/riv.jpg'></a>",
+            "info": "",
+            "link": "", 
+            "title": "",
+            "icon": "photo"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [177.84324568978934,-38.3764143811523]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
             "description": "Waves are generally considered to be an important control on shore platform evolution but there have been very few detailed studies of wave dynamics on rocky coasts. This study provides a detailed description of wave transformation processes across a shore platform near Gisborne, New Zealand.",
             "info": "H. Ogawa, M.E. Dickson, P.S. Kench",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0278434311001683\" target=\"_blank\">Link to article</a>",
@@ -243,46 +297,6 @@ var journals = {
     },{
         "type": "Feature",
         "properties": {
-            "description": "<a href=\"images/tarn_full.jpg\"><img src= 'images/tarn.jpg'></a>",
-            "info": "",
-            "link": "", 
-            "title": "",
-            "icon": "photo"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [177.788511,-38.240911]
-        }
-    },{
-        "type": "Feature",
-        "properties": {
-            "description": "<a href=\"images/bea_full.jpg\"><img src= 'images/bea.jpg'></a>",
-            "info": "",
-            "link": "", 
-            "title": "",
-            "icon": "photo"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [178.000740420274,-38.672019638269774]
-        }
-    },    {
-        "type": "Feature",
-        "properties": {
-            "description": "<a href=\"images/riv_full.jpg\"><img src= 'images/riv.jpg'></a>",
-            "info": "",
-            "link": "", 
-            "title": "",
-            "icon": "photo"
-        },
-        "geometry": {
-            "type": "Point",
-            "coordinates": [177.84324568978934,-38.3764143811523]
-        }
-    },  
-    {
-        "type": "Feature",
-        "properties": {
             "description": "Connectivity between an actively eroding gully complex and upper Waipaoa catchment via a steep, 1-kmlong alluvial fan is assessed using digital elevation models (DEMs) of the Tarndale fan derived from 10 high resolution GPS surveys between 2004 and 2008. Repeat DEM analysis provides a means of assessing transfer of sediment supplied from the Tarndale gully through the fan to the Te Weraroa Stream and thus inferring connectivity between these landscape components from which a conceptual coupling model is derived.",
             "info": "Ian C. Fuller, Mike Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0169555X10005490\" target=\"_blank\">Link to article</a>",
@@ -326,7 +340,7 @@ var journals = {
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwk35i8900cm2qoijjvba6hd',
+    style: 'mapbox://styles/andrew84555/ciwlex3mm00dn2qoihquwtx3x',
     center: [177.8664, - 38.4695],
     zoom: 9.5
     //20 is zoomed in, 0 is zoomed out
@@ -407,7 +421,7 @@ map.on('load', function() {
                 'raster-opacity': 0.85
             }
         });
-     map.setLayerZoomRange('Progradational Timeline', 0, 11);
+     map.setLayerZoomRange('Progradational Timeline', 0, 12);
 
     slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
@@ -465,7 +479,7 @@ map.on('load', function() {
 
 
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-video'] });
 
     if (!features.length) {
         return;
@@ -488,11 +502,11 @@ map.on('mousemove', function (e) {
     document.getElementById('info').innerHTML =
             // e.lngLat is the longitude, latitude geographical position of the event
     JSON.stringify(e.lngLat);
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-video'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 
-var toggleableLayerIds = [ 'DigitalGlobe Satellite Imagery', 'Tarndale LIDAR','Coastal LIDAR', 'Progradational Timeline'];
+var toggleableLayerIds = [ 'DigitalGlobe Satellite Imagery', 'Tarndale LIDAR', 'Coastal LIDAR', 'Progradational Timeline'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
