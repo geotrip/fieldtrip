@@ -170,37 +170,20 @@ map.on('load', function() {
             source: '1940',
             type: 'raster',
         });
-    map.addSource('Rivers', {
-        type: 'vector',
-        url: 'mapbox://andrew84555.6brw10rw'
-    });
-    map.addLayer({
-        "id": "Rivers",
-        "type": "line",
-        "source": "Rivers",
-        "source-layer": "waiheke_rivers-cgk2dv",
-        "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-        },
-        "paint": {
-            "line-color": "#ff69b4",
-            "line-width": 1
-        }
-    });
     map.addSource('Te Matuku Marine Reserve', {
         type: 'vector',
-        url: 'mapbox://andrew84555.cilwqsey'
+        url: 'mapbox://andrew84555.c65ljwba'
     });
     map.addLayer({
         "id": "Te Matuku Marine Reserve",
         "type": "fill",
         "source": "Te Matuku Marine Reserve",
-        "source-layer": "MR-byu3db",
+        "source-layer": "waiheke-109wag",
         "paint": {
-            "fill-color": "#808080",
-            'fill-outline-color': "#808080",
-            "fill-opacity": 0.6
+            
+            "fill-pattern" :'pedestrian-polygon',
+            
+            "fill-opacity": 1
         }
     });
         slider.addEventListener('input', function(e) {
