@@ -19,6 +19,36 @@
         font: 12px/20px 'Open Sans', sans-serif;
         z-index: 1
     }
+    .map-overlay {
+        font: 12px/20px 'Open Sans', sans-serif;
+        position: absolute;
+        width: 250px;
+        top: 200px;
+        left: 0;
+        padding: 10px;
+    }
+
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .map-overlay label {
+        display: block;
+        margin: 0 0 10px;
+    }
+
+    .map-overlay input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin: 0;
+        cursor: ew-resize;
+    }
     #menu {
         background: #fff;
         position: absolute;
@@ -92,6 +122,12 @@
 </style>
 <nav id="menu"></nav>
 <div id='map'></div>
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <label>Overlay opacity: <span id='slider-value'>100%</span></label>
+        <input id='slider' type='range' min='0' max='100' step='0' value='100' />
+    </div>
+</div>
 </div>
 
 <script>
@@ -103,21 +139,48 @@ var map = new mapboxgl.Map({
     center: [175.1080, - 36.80],
     zoom: 11
 });
+
+var slider = document.getElementById('slider');
+var sliderValue = document.getElementById('slider-value');
+
 map.on('load', function() {
-    // Add a GeoJSON source containing place coordinates and information.
-    map.addSource('LINZ Aerial Imagery', {
+    map.addSource('LINZ aerial imagery (2010)', {
         type: 'raster',
         url: 'mapbox://andrew84555.2wqkmrna',
         tileSize: 256
     });
     map.addLayer({
-        'id': 'LINZ Aerial Imagery',
+        'id': 'LINZ aerial imagery (2010)',
         'type': 'raster',
-        'source': 'LINZ Aerial Imagery',
-        'source-layer': 'LINZ Aerial Imagery',
-    });        
+        'source': 'LINZ aerial imagery (2010)',
+        'source-layer': 'LINZ aerial imagery (2010)',
+    }); 
+    map.addSource('1940', {
+         type: 'image',
+         url: 'images/1940.gif',
+         coordinates: [
+                [175.13349766, -36.8021792047],//top left
+                [175.160180602, -36.8021792047],//top right
+                [175.160180602, -36.8298860413],//bottom right
+                [175.13349766, -36.8298860413]//bottom left
+            ]
+        });
+    map.addLayer({
+            id: '1940',
+            source: '1940',
+            type: 'raster',
+        });
+            slider.addEventListener('input', function(e) {
+        // Adjust the layers opacity. layer here is arbitrary - this could
+        // be another layer name found in your style or a custom layer
+        // added on the fly using `addSource`.
+        map.setPaintProperty('1940', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+
+        // Value indicator
+        sliderValue.textContent = e.target.value + '%';
+    });       
 });
-var toggleableLayerIds = [ 'LINZ Aerial Imagery'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
