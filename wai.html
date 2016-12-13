@@ -170,7 +170,7 @@ map.on('load', function() {
             source: '1940',
             type: 'raster',
         });
-        map.addSource('Rivers', {
+    map.addSource('Rivers', {
         type: 'vector',
         url: 'mapbox://andrew84555.6brw10rw'
     });
@@ -188,6 +188,21 @@ map.on('load', function() {
             "line-width": 1
         }
     });
+    map.addSource('Te Matuku Marine Reserve', {
+        type: 'vector',
+        url: 'mapbox://andrew84555.cilwqsey'
+    });
+    map.addLayer({
+        "id": "Te Matuku Marine Reserve",
+        "type": "fill",
+        "source": "Te Matuku Marine Reserve",
+        "source-layer": "MR-byu3db",
+        "paint": {
+            "fill-color": "#808080",
+            'fill-outline-color': "#808080",
+            "fill-opacity": 0.6
+        }
+    });
         slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
         // be another layer name found in your style or a custom layer
@@ -198,7 +213,7 @@ map.on('load', function() {
         sliderValue.textContent = e.target.value + '%';
     });       
 });
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940', 'Rivers'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940', 'Rivers', 'Te Matuku Marine Reserve'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
