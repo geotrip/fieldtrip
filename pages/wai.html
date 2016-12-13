@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Waiheke Exercise</title>
+    <title></title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
@@ -170,7 +170,25 @@ map.on('load', function() {
             source: '1940',
             type: 'raster',
         });
-            slider.addEventListener('input', function(e) {
+        map.addSource('Rivers', {
+        type: 'vector',
+        url: 'mapbox://andrew84555.6brw10rw'
+    });
+    map.addLayer({
+        "id": "Rivers",
+        "type": "line",
+        "source": "Rivers",
+        "source-layer": "waiheke_rivers-cgk2dv",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#ff69b4",
+            "line-width": 1
+        }
+    });
+        slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
         // be another layer name found in your style or a custom layer
         // added on the fly using `addSource`.
@@ -180,7 +198,7 @@ map.on('load', function() {
         sliderValue.textContent = e.target.value + '%';
     });       
 });
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940', 'Rivers'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
