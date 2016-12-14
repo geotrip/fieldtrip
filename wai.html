@@ -106,7 +106,7 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     }
     .filter-group input[type=checkbox] + label {
-    	color: #404040;
+        color: #404040;
         background-color: #fff;
         text-transform: capitalize;
     }
@@ -135,7 +135,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2Znb
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/outdoors-v9',
+    style: 'mapbox://styles/andrew84555/ciwo7l8wf00g52qqov0sfoxjh',
     center: [175.1080, - 36.80],
     zoom: 11
 });
@@ -179,13 +179,39 @@ map.on('load', function() {
         "type": "fill",
         "source": "Te Matuku Marine Reserve",
         "source-layer": "waiheke-109wag",
-        "paint": {
-            
-            "fill-pattern" :'pedestrian-polygon',
-            
+        "paint": {            
+            "fill-pattern" :'pedestrian-polygon',            
             "fill-opacity": 1
         }
     });
+    map.addSource("Bus route", {
+        "type": "geojson", 
+        "data": "bus_waiheke.geojson"
+    });
+    map.addLayer({
+        "id": "Bus route",
+        "type": "line",
+        "source": "Bus route",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round",
+        },
+        "paint": {
+            "line-color": "#ff8080",
+            "line-width": 4
+        }
+    });
+    map.addLayer({
+        "id": "labels",
+        "type": "symbol",
+        "source": "Bus route",
+        "layout": {
+            "symbol-placement": 'line',
+            "text-field": "{name}",
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-size": 10,
+        }
+     });
         slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
         // be another layer name found in your style or a custom layer
@@ -196,7 +222,7 @@ map.on('load', function() {
         sliderValue.textContent = e.target.value + '%';
     });       
 });
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940', 'Rivers', 'Te Matuku Marine Reserve'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940', 'Rivers', 'Te Matuku Marine Reserve', 'Bus route'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
