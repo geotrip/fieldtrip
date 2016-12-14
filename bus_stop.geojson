@@ -113,5 +113,4 @@
 {"type":"Feature","geometry":{"type":"Point","coordinates":[175.03226,-36.791553]},"properties":{"stop_id":6986,"stop_code":1200,"stop_name":"32 Wellington Rd","stop_lat":-36.791553,"stop_lon":175.03226}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[175.097,-36.78868]},"properties":{"stop_id":7283,"stop_code":1598,"stop_name":"Waiheke Rd","stop_lat":-36.78868,"stop_lon":175.097}},
 {"type":"Feature","geometry":{"type":"Point","coordinates":[175.04651,-36.795792]},"properties":{"stop_id":7303,"stop_code":1542,"stop_name":"22 Belgium St","stop_lat":-36.795792,"stop_lon":175.04651}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[175.13267163088327,-36.85274001927189]},"properties":{"stop_id":0,"stop_code":0,"stop_name":"Matuku Reserve","stop_lat":0,"stop_lon":0}}
 ]}
