@@ -136,10 +136,12 @@ var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/andrew84555/ciwo7l8wf00g52qqov0sfoxjh',
+    //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
     zoom: 11
 });
 
+//iniatialise the slider
 var slider = document.getElementById('slider');
 var sliderValue = document.getElementById('slider-value');
 
@@ -155,10 +157,11 @@ map.on('load', function() {
         'source': 'LINZ aerial imagery (2010)',
         'source-layer': 'LINZ aerial imagery (2010)',
     }); 
-    map.addSource('1940', {
+    map.addSource('1940 Aerial', {
          type: 'image',
          url: 'images/1940.gif',
          coordinates: [
+         //you need to describe the four corners of your image in WGS84. It can be easier to make your image sqaure, so the left and right top corners are level and vice versa by giving it a sqaure transparent background, which preserves the original orientation of the image. The freeware Paint.net magic wand tool (set to 0% tolerance) is good for this.
                 [175.13349766, -36.8021792047],//top left
                 [175.160180602, -36.8021792047],//top right
                 [175.160180602, -36.8298860413],//bottom right
@@ -166,8 +169,8 @@ map.on('load', function() {
             ]
         });
     map.addLayer({
-            id: '1940',
-            source: '1940',
+            id: '1940 Aerial',
+            source: '1940 Aerial',
             type: 'raster',
         });
     map.addSource('Te Matuku Marine Reserve', {
@@ -180,11 +183,13 @@ map.on('load', function() {
         "source": "Te Matuku Marine Reserve",
         "source-layer": "waiheke-109wag",
         "paint": {            
-            "fill-pattern" :'pedestrian-polygon',            
-            "fill-opacity": 1
+            "fill-color": "#0000ff",
+            "fill-outline-color": "#0000ff",        
+            "fill-opacity": 0.2
         }
-    });
+    });    
     map.addSource("Bus route", {
+        //this pulls from a text file saved as a geojson, much cleaner than having it in the code. It can be in a folder or just in the same root folder as it is in here. The data was scraped from OSM, downloaded as a esri shapefile, and converted to a geojson file by uploading the zipped shapefile to mapshaper (www.mapshaper.org). 
         "type": "geojson", 
         "data": "bus_waiheke.geojson"
     });
@@ -206,23 +211,25 @@ map.on('load', function() {
         "type": "symbol",
         "source": "Bus route",
         "layout": {
+            //this means your labels follow the line, looks much nicer than if they just float free. 
             "symbol-placement": 'line',
-            "text-field": "{name}",
+            "text-field": "{name}",//just pulls from the geojson.
             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 10,
+            "text-size": 11,
         }
      });
         slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
         // be another layer name found in your style or a custom layer
         // added on the fly using `addSource`.
-        map.setPaintProperty('1940', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+        map.setPaintProperty('1940 Aerial', 'raster-opacity', parseInt(e.target.value, 10) / 100);
 
         // Value indicator
         sliderValue.textContent = e.target.value + '%';
     });       
 });
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940', 'Rivers', 'Te Matuku Marine Reserve', 'Bus route'];
+//just stick the ids of the layers you want to be able to turn off and on here.
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Bus route'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
