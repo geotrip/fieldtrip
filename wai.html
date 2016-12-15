@@ -23,7 +23,7 @@
         font: 12px/20px 'Open Sans', sans-serif;
         position: absolute;
         width: 250px;
-        top: 200px;
+        top: 300px;
         left: 0;
         padding: 10px;
     }
@@ -227,7 +227,7 @@ map.on('load', function() {
         "type": "symbol",
         "source": "Bus stops",
         "layout": {
-            "icon-image": "dot-10",
+            "icon-image": "marker-11",
             "text-field": "{stop_name}",
             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
             "text-offset": [1, 1],
@@ -236,6 +236,43 @@ map.on('load', function() {
         }
     });
     map.setLayerZoomRange('Bus stops', 14, 20);
+    map.addSource("2001 Population", {
+        "type": "geojson", 
+        "data": "pop_01.geojson"
+    });
+    map.addLayer({
+        "id": "2001 Population",
+        "type": "symbol",
+        "source": "2001 Population",
+        "layout": {
+            "icon-image": "dot-9",
+        }
+    });
+    map.addSource("2006 Population", {
+        "type": "geojson", 
+        "data": "pop_06.geojson"
+    });
+    map.addLayer({
+        "id": "2006 Population",
+        "type": "symbol",
+        "source": "2006 Population",
+        "layout": {
+            "icon-image": "dot-9",
+        }
+    });
+    map.addSource("2013 Population", {
+        "type": "geojson", 
+        "data": "pop_13.geojson"
+    });
+    map.addLayer({
+        "id": "2013 Population",
+        "type": "symbol",
+        "source": "2013 Population",
+        "layout": {
+            "icon-image": "dot-9",
+        }
+    });
+    
 
 
         slider.addEventListener('input', function(e) {
@@ -249,7 +286,7 @@ map.on('load', function() {
     });       
 });
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Bus route', 'Bus stops'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Bus route', 'Bus stops', '2001 Population', '2006 Population', '2013 Population'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
