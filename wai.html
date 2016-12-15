@@ -22,8 +22,8 @@
     .map-overlay {
         font: 12px/20px 'Open Sans', sans-serif;
         position: absolute;
-        width: 250px;
-        top: 300px;
+        width: 220px;
+        top: 350px;
         left: 0;
         padding: 10px;
     }
@@ -56,7 +56,7 @@
         top: 1%;
         left: 10px;
         border-radius: 3px;
-        width: 250px;        
+        width: 220px;        
         font-family: 'Open Sans', sans-serif;
     }
     #menu a {
@@ -135,7 +135,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2Znb
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwppo0gx00922pnxmdae6pru',
+    style: 'mapbox://styles/andrew84555/ciwq49aqd00m72qoi0zjejblp',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
     zoom: 11
@@ -177,6 +177,7 @@ map.on('load', function() {
         type: 'vector',
         url: 'mapbox://andrew84555.c65ljwba'
     });
+
     map.addLayer({
         "id": "Te Matuku Marine Reserve",
         "type": "fill",
@@ -187,7 +188,7 @@ map.on('load', function() {
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.2
         }
-    });    
+    });  
     map.addSource("2001 Population", {
         "type": "geojson", 
         "data": "pop_01.geojson"
