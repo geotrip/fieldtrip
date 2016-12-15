@@ -135,7 +135,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2Znb
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwo7l8wf00g52qqov0sfoxjh',
+    style: 'mapbox://styles/andrew84555/ciwppo0gx00922pnxmdae6pru',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
     zoom: 11
@@ -188,6 +188,46 @@ map.on('load', function() {
             "fill-opacity": 0.2
         }
     });    
+    map.addSource("2001 Population", {
+        "type": "geojson", 
+        "data": "pop_01.geojson"
+    });
+    map.addLayer({
+        "id": "2001 Population",
+        "type": "symbol",
+        "source": "2001 Population",
+        "layout": {
+            "icon-image": "red",
+            "icon-allow-overlap": true
+        }
+    });
+    map.addSource("2006 Population", {
+        "type": "geojson", 
+        "data": "pop_06.geojson"
+    });
+    map.addLayer({
+        "id": "2006 Population",
+        "type": "symbol",
+        "source": "2006 Population",
+        "layout": {
+            "icon-image": "blue",
+            "icon-allow-overlap": true
+        }
+    });
+    map.addSource("2013 Population", {
+        "type": "geojson", 
+        "data": "pop_13.geojson"
+        
+    });
+    map.addLayer({
+        "id": "2013 Population",
+        "type": "symbol",
+        "source": "2013 Population",
+        "layout": {
+            "icon-image": "green",
+            "icon-allow-overlap": true
+        }
+    });
     map.addSource("Bus route", {
         //this pulls from a text file saved as a geojson, much cleaner than having it in the code. It can be in a folder or just in the same root folder as it is in here. The data was scraped from OSM, downloaded as a esri shapefile, and converted to a geojson file by uploading the zipped shapefile to mapshaper (www.mapshaper.org). 
         "type": "geojson", 
@@ -236,42 +276,6 @@ map.on('load', function() {
         }
     });
     map.setLayerZoomRange('Bus stops', 14, 20);
-    map.addSource("2001 Population", {
-        "type": "geojson", 
-        "data": "pop_01.geojson"
-    });
-    map.addLayer({
-        "id": "2001 Population",
-        "type": "symbol",
-        "source": "2001 Population",
-        "layout": {
-            "icon-image": "dot-9",
-        }
-    });
-    map.addSource("2006 Population", {
-        "type": "geojson", 
-        "data": "pop_06.geojson"
-    });
-    map.addLayer({
-        "id": "2006 Population",
-        "type": "symbol",
-        "source": "2006 Population",
-        "layout": {
-            "icon-image": "dot-9",
-        }
-    });
-    map.addSource("2013 Population", {
-        "type": "geojson", 
-        "data": "pop_13.geojson"
-    });
-    map.addLayer({
-        "id": "2013 Population",
-        "type": "symbol",
-        "source": "2013 Population",
-        "layout": {
-            "icon-image": "dot-9",
-        }
-    });
     
 
 
