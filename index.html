@@ -23,7 +23,7 @@
         display: block;
         position: relative;
         margin: 0px auto;
-        width: 50%;
+        width: 370px;
         padding: 10px;
         border: none;
         border-radius: 3px;
@@ -31,6 +31,7 @@
         text-align: center;
         color: #222;
         background: #fff;
+        align-content: center;
     }
     .map-overlay {
 	    font: 12px/20px 'Open Sans', sans-serif;
@@ -183,11 +184,11 @@
 </div>
 <div id='legend' class='legend'>
     <h4>Legend</h4>
-    <p><img src=images/hillslope.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;">Hillslope<br>
-    <img src=images/fluvial.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;">Fluvial<br>
-    <img src=images/coastal.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;">Coastal<br>
-    <img src=images/photo.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;">Photo<br>
-    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;">Youtube<br>
+    <p><img src=images/hillslope.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Hillslope<br>
+    <img src=images/fluvial.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Fluvial<br>
+    <img src=images/coastal.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Coastal<br>
+    <img src=images/photo.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Photo<br>
+    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Youtube
     </p>
   </div>
 
@@ -473,8 +474,8 @@ map.on('load', function() {
             id: 'Coastal LIDAR',
             source: 'Coastal LIDAR',
             type: 'raster',
-            
         });
+    map.setLayerZoomRange('Coastal LIDAR', 11, 20);  
     map.addSource('Tarndale LIDAR', {
             type: 'image',
             url: 'images/tew.png',
@@ -491,7 +492,7 @@ map.on('load', function() {
             source: 'Tarndale LIDAR',
             type: 'raster',
         });
-
+    map.setLayerZoomRange('Tarndale LIDAR', 11, 20);  
     map.addSource('Progradational Timeline', {
         type: 'image',
         url: 'images/7a.gif',
@@ -511,7 +512,7 @@ map.on('load', function() {
                 'raster-opacity': 0.85
             }
         });
-     map.setLayerZoomRange('Progradational Timeline', 0, 12);
+     map.setLayerZoomRange('Progradational Timeline', 10, 12);
 
     slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
