@@ -130,10 +130,11 @@
     right: 10px;
     top:50%
     z-index: 1;
-    width: 130px;
+    width: 180px;
     }
 
     .legend h4 {
+    font: 20px/20px 'Open Sans', sans-serif;
     margin: 0 0 10px;
     }
 
@@ -144,6 +145,13 @@
     margin-right: 5px;
     width: 10px;
     }
+    .legend div span {
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    margin-right: 5px;
+    width: 10px;
+}
 </style>
 <nav id="menu"></nav>
 <div id='map'></div>
@@ -156,11 +164,18 @@
 </div>
 <div id='legend' class='legend'>
     <h4>Legend</h4>
-    <p><img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve<br>
+    <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Existing)<br>
     <img src=images/MF.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Farm<br>
     <img src=images/RIV.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Waterway<br>
-    <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br>
-    </p>
+    <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br><br>
+    <i><h4>Population density</h4></i>
+    <div><span style='background-color: #E50025'></span>2000 per km2</div>
+    <div><span style='background-color: #DD6000'></span>1600 per km2</div>    
+    <div><span style='background-color: #CED500'></span>1200 per km2</div>    
+    <div><span style='background-color: #4BCE00'></span>800 per km2</div>    
+    <div><span style='background-color: #00C62E'></span>400 per km2</div>    
+    <div><span style='background-color: #00BF9F'></span>Less than 200 per km2</div>
+
   </div>
 
 <script>
@@ -190,7 +205,7 @@ map.on('load', function() {
         'source': 'LINZ aerial imagery (2010)',
         'source-layer': 'LINZ aerial imagery (2010)',
     });
-    map.setLayerZoomRange('LINZ aerial imagery (2010)', 15, 20);   
+    map.setLayerZoomRange('LINZ aerial imagery (2010)', 14, 20);   
     map.addSource('1940 Aerial', {
          type: 'image',
          url: 'images/1940.gif',
@@ -239,46 +254,86 @@ map.on('load', function() {
             "fill-opacity": 0.5
         }
     });   
-    map.addSource("2001 Population", {
-        "type": "geojson", 
-        "data": "pop_01.geojson"
+    map.addSource("population", {
+        'type': 'vector',
+        'url': 'mapbox://andrew84555.cyentrrn'
     });
     map.addLayer({
-        "id": "2001 Population",
-        "type": "symbol",
-        "source": "2001 Population",
-        "layout": {
-            "icon-image": "red",
-            "icon-allow-overlap": true
+        'id': 'Population density 2001 (per km2)',
+        'source': 'population',
+        'source-layer': 'MB_norm-43nei4',        
+        'type': 'fill',
+        'paint': {
+            'fill-color': {
+                property: 'NORM_01',
+                stops: [
+                    [0, '#00BF9F'],
+                    [200, '#00C267'],
+                    [400, '#00C62E'],
+                    [600, '#0DCA00'],
+                    [800, '#4BCE00'],
+                    [1000, '#8CD200'],
+                    [1200, '#CED500'],
+                    [1400, '#D99F00'],
+                    [1600, '#DD6000'],
+                    [1800, '#E11E00'],
+                    [2000, '#E50025']
+                ]
+            },
+            'fill-opacity': 0.75
         }
-    });
-    map.addSource("2006 Population", {
-        "type": "geojson", 
-        "data": "pop_06.geojson"
-    });
+    }, 'waterway-label');
     map.addLayer({
-        "id": "2006 Population",
-        "type": "symbol",
-        "source": "2006 Population",
-        "layout": {
-            "icon-image": "blue",
-            "icon-allow-overlap": true
+        'id': 'Population density 2006 (per km2)',
+        'source': 'population',
+        'source-layer': 'MB_norm-43nei4',        
+        'type': 'fill',
+        'paint': {
+            'fill-color': {
+                property: 'NORM_06',
+                stops: [
+                    [0, '#00BF9F'],
+                    [200, '#00C267'],
+                    [400, '#00C62E'],
+                    [600, '#0DCA00'],
+                    [800, '#4BCE00'],
+                    [1000, '#8CD200'],
+                    [1200, '#CED500'],
+                    [1400, '#D99F00'],
+                    [1600, '#DD6000'],
+                    [1800, '#E11E00'],
+                    [2000, '#E50025']
+                ]
+            },
+            'fill-opacity': 0.75
         }
-    });
-    map.addSource("2013 Population", {
-        "type": "geojson", 
-        "data": "pop_13.geojson"
-        
-    });
+    }, 'waterway-label');
     map.addLayer({
-        "id": "2013 Population",
-        "type": "symbol",
-        "source": "2013 Population",
-        "layout": {
-            "icon-image": "green",
-            "icon-allow-overlap": true
+        'id': 'Population density 2013 (per km2)',
+        'source': 'population',
+        'source-layer': 'MB_norm-43nei4',        
+        'type': 'fill',
+        'paint': {
+            'fill-color': {
+                property: 'NORM_13',
+                stops: [
+                    [0, '#00BF9F'],
+                    [200, '#00C267'],
+                    [400, '#00C62E'],
+                    [600, '#0DCA00'],
+                    [800, '#4BCE00'],
+                    [1000, '#8CD200'],
+                    [1200, '#CED500'],
+                    [1400, '#D99F00'],
+                    [1600, '#DD6000'],
+                    [1800, '#E11E00'],
+                    [2000, '#E50025']
+                ]
+            },
+            'fill-opacity': 0.75
         }
-    });
+    }, 'waterway-label');
+
     map.addSource("Bus route", {
         //this pulls from a text file saved as a geojson, much cleaner than having it in the code. It can be in a folder or just in the same root folder as it is in here. The data was scraped from OSM, downloaded as a esri shapefile, and converted to a geojson file by uploading the zipped shapefile to mapshaper (www.mapshaper.org). 
         "type": "geojson", 
@@ -340,8 +395,9 @@ map.on('load', function() {
         sliderValue.textContent = e.target.value + '%';
     });       
 });
+var stateLegendEl = document.getElementById('state-legend');
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Marine Farms', 'Bus route', 'Bus stops', '2001 Population', '2006 Population', '2013 Population'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Marine Farms', 'Bus route', 'Bus stops', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');

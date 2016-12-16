@@ -158,8 +158,8 @@
     z-index: 1;
     width: 100px;
     }
-
     .legend h4 {
+    font: 20px/20px 'Open Sans', sans-serif;
     margin: 0 0 10px;
     }
 
@@ -169,6 +169,18 @@
     height: 10px;
     margin-right: 5px;
     width: 10px;
+    }
+    .att {
+    background-color: #fff;    
+    border-radius: 3px;
+    bottom: 0px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    font: 10px/20px 'Open Sans', sans-serif;
+    padding: 1px;
+    position: absolute;       
+    left: 0px;
+    z-index: 1;
+    width: 430px;
     }
 
 </style>
@@ -184,13 +196,16 @@
 </div>
 <div id='legend' class='legend'>
     <h4>Legend</h4>
-    <p><img src=images/hillslope.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Hillslope<br>
+    <img src=images/hillslope.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Hillslope<br>
     <img src=images/fluvial.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Fluvial<br>
     <img src=images/coastal.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Coastal<br>
     <img src=images/photo.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Photo<br>
-    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Youtube
-    </p>
+    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Youtube   
   </div>
+<div id='attibution' class='att'>
+ Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
+    Coastal icon &copy; <a href=https://www.iconfinder.com/icons/1527307/ocean_sea_water_waves_icon#size=128> Alfredo Hernandez </a> (modified) <a href=https://creativecommons.org/licenses/by/3.0/legalcode>License</a>
+</div>
 
 
 <script>
