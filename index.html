@@ -156,9 +156,9 @@
     right: 10px;
     top:50%
     z-index: 1;
-    width: 100px;
+    width: 150px;
     }
-    .legend h4 {
+    .legend h3 {
     font: 20px/20px 'Open Sans', sans-serif;
     margin: 0 0 10px;
     }
@@ -170,6 +170,13 @@
     margin-right: 5px;
     width: 10px;
     }
+    .legend div span {
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    margin-right: 5px;
+    width: 10px;
+}
     .att {
     background-color: #fff;    
     border-radius: 3px;
@@ -195,12 +202,21 @@
     </div>
 </div>
 <div id='legend' class='legend'>
-    <h4>Legend</h4>
+    <h3>Legend</h3>
     <img src=images/hillslope.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Hillslope<br>
     <img src=images/fluvial.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Fluvial<br>
     <img src=images/coastal.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Coastal<br>
     <img src=images/photo.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Photo<br>
-    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Youtube   
+    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Youtube<br><br>
+    <h3>Progradational Timeline</h3>
+    <div><span style='background-color: #E50029'></span>Present to 1 ka</div>
+    <div><span style='background-color: #DE4600'></span>1 to 2 ka</div>    
+    <div><span style='background-color: #D8B000'></span>2 to 3 ka</div>    
+    <div><span style='background-color: #8FD200'></span>3 to 4 ka</div>    
+    <div><span style='background-color: #25CB00'></span>4 to 5 ka</div>    
+    <div><span style='background-color: #00C53E'></span>5 to 6 ka</div>
+    <div><span style='background-color: #00BF9B'></span>6 to 7 ka</div>
+  </div>   
   </div>
 <div id='attibution' class='att'>
  Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
@@ -508,26 +524,35 @@ map.on('load', function() {
             type: 'raster',
         });
     map.setLayerZoomRange('Tarndale LIDAR', 11, 20);  
-    map.addSource('Progradational Timeline', {
-        type: 'image',
-        url: 'images/7a.gif',
-        coordinates: [
-                [177.812861519, -38.562933925],
-                [178.128957046, -38.562933925],
-                [178.128957046, -38.765719368],
-                [177.812861519, -38.765719368]
-            ]
-        });
+    map.addSource('progPoly', {
+        'type': 'vector',
+        url: 'mapbox://andrew84555.9pfnqg2h'
+    });
+  
+    map.addLayer({
+        'id': 'Progradational Timeline',
+        'type': 'fill',
+        'source': 'progPoly',
+        'source-layer': 'prog-83r8dg',        
+        'paint': {
+            "fill-color": {
+                property: 'OBJECTID',
+                stops: [
+                    [1, '#E50029'],
+                    [2, '#DE4600'],
+                    [3, '#D8B000'],
+                    [4, '#8FD200'],
+                    [5, '#25CB00'],
+                    [6, '#00C53E'],
+                    [7, '#00BF9B']
+                ]
+            },
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'white',
+        }
+    });
 
-     map.addLayer({
-        id: 'Progradational Timeline',
-        source: 'Progradational Timeline',
-        type: 'raster',
-                    paint: {
-                'raster-opacity': 0.85
-            }
-        });
-     map.setLayerZoomRange('Progradational Timeline', 10, 12);
+    map.setLayerZoomRange('Progradational Timeline', 8, 12);
 
     slider.addEventListener('input', function(e) {
         // Adjust the layers opacity. layer here is arbitrary - this could
