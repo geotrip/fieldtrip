@@ -130,7 +130,7 @@
     right: 10px;
     top:50%
     z-index: 1;
-    width: 180px;
+    width: 200px;
     }
 
     .legend h4 {
@@ -165,6 +165,7 @@
 <div id='legend' class='legend'>
     <h4>Legend</h4>
     <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Existing)<br>
+    <img src=images/P_MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Proposed)<br>
     <img src=images/MF.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Farm<br>
     <img src=images/RIV.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Waterway<br>
     <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br><br>
@@ -183,7 +184,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2Znb
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwq49aqd00m72qoi0zjejblp',
+    style: 'mapbox://styles/andrew84555/ciwsx0hdv00nq2qqoxup4lm90',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
     zoom: 11
@@ -204,8 +205,8 @@ map.on('load', function() {
         'type': 'raster',
         'source': 'LINZ aerial imagery (2010)',
         'source-layer': 'LINZ aerial imagery (2010)',
-    });
-    map.setLayerZoomRange('LINZ aerial imagery (2010)', 14, 20);   
+    },'place-suburb');
+    map.setLayerZoomRange('LINZ aerial imagery (2010)', 13, 20);   
     map.addSource('1940 Aerial', {
          type: 'image',
          url: 'images/1940.gif',
@@ -235,9 +236,9 @@ map.on('load', function() {
         "paint": {            
             "fill-color": "#0000ff",
             "fill-outline-color": "#0000ff",        
-            "fill-opacity": 0.2
+            "fill-opacity": 0.5
         }
-    }); 
+    },'labels-a0cld4'); 
     map.addSource('Marine Farms', {
         type: 'vector',
         url: 'mapbox://andrew84555.4sbq994k'
@@ -253,7 +254,23 @@ map.on('load', function() {
             "fill-outline-color": "#ff6600",        
             "fill-opacity": 0.5
         }
-    });   
+    });
+    map.addSource('Proposed Marine Reserves', {
+        type: 'vector',
+        url: 'mapbox://andrew84555.8e1d02sy'
+    });
+
+    map.addLayer({
+        "id": "Proposed Marine Reserves",
+        "type": "fill",
+        "source": "Proposed Marine Reserves",
+        "source-layer": "proposed_MR-811153",
+        "paint": {            
+            "fill-color": "#80ff80",
+            "fill-outline-color": "#80ff80",        
+            "fill-opacity": 0.5
+        }
+    },'labels-a0cld4');  
     map.addSource("population", {
         'type': 'vector',
         'url': 'mapbox://andrew84555.cyentrrn'
@@ -351,7 +368,7 @@ map.on('load', function() {
             "line-color": "#ff8080",
             "line-width": 4
         }
-    });
+    },'place-suburb');
     map.addLayer({
         "id": "labels",
         "type": "symbol",
@@ -422,6 +439,7 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
 }
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
+
 </script>
 
 </body>
