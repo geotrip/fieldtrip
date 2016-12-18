@@ -37,7 +37,7 @@
 	    font: 12px/20px 'Open Sans', sans-serif;
 	    position: absolute;
 	    width: 220px;
-	    top: 200px;
+	    top: 240px;
 	    left: 0;
 	    padding: 10px;
     }
@@ -503,7 +503,7 @@ map.on('load', function() {
         'source-layer': 'DigitalGlobe Satellite Imagery',
 
     },'labels-gis-52gd7r');
-    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 12, 20);        
+    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 12, 20);     
     map.addSource('Coastal LIDAR', {
          type: 'image',
          url: 'images/coast.png',
@@ -519,7 +519,22 @@ map.on('load', function() {
             source: 'Coastal LIDAR',
             type: 'raster',
         });
-    map.setLayerZoomRange('Coastal LIDAR', 11, 20);  
+    map.setLayerZoomRange('Coastal LIDAR', 11, 20);
+    map.addSource('Lower Waipaoa Historical Imagery', {
+            type: 'image',
+            url: 'images/old.png',
+            coordinates: [
+                [177.909288, -38.641381],
+                [177.941577, -38.641299],
+                [177.941683, -38.677909],
+                [177.909395, -38.677983]
+            ]
+        });
+    map.addLayer({
+            id: 'Lower Waipaoa Historical Imagery',
+            source: 'Lower Waipaoa Historical Imagery',
+            type: 'raster',
+        });  
     map.addSource('Tarndale LIDAR', {
             type: 'image',
             url: 'images/tew.png',
@@ -530,7 +545,6 @@ map.on('load', function() {
                 [177.776287985, -38.2926082213]
             ]
         });
-
     map.addLayer({
             id: 'Tarndale LIDAR',
             source: 'Tarndale LIDAR',
@@ -547,13 +561,12 @@ map.on('load', function() {
                 [177.812964, -38.537780]
             ]
         });
-
     map.addLayer({
             id: 'Terrace Diagram',
             source: 'Terrace Diagram',
             type: 'raster',
         },'labels-gis-52gd7r');
-    map.setLayerZoomRange('Terrace Diagram', 7, 20);  
+    map.setLayerZoomRange('Terrace Diagram', 10, 20); 
     map.addSource('progPoly', {
         'type': 'vector',
         url: 'mapbox://andrew84555.9pfnqg2h'
@@ -590,7 +603,8 @@ map.on('load', function() {
         // added on the fly using `addSource`.
     map.setPaintProperty('Tarndale LIDAR', 'raster-opacity', parseInt(e.target.value, 10) / 100);
     map.setPaintProperty('Coastal LIDAR', 'raster-opacity', parseInt(e.target.value, 10) / 100);
-    map.setPaintProperty('Terrace Diagram', 'raster-opacity', parseInt(e.target.value, 10) / 100);     
+    map.setPaintProperty('Terrace Diagram', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    map.setPaintProperty('Lower Waipaoa Historical Imagery', 'raster-opacity', parseInt(e.target.value, 10) / 100);      
 
         // Value indicator
         sliderValue.textContent = e.target.value + '%';
@@ -668,7 +682,7 @@ map.on('mousemove', function (e) {
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 
-var toggleableLayerIds = ['DigitalGlobe Satellite Imagery', 'Tarndale LIDAR', 'Coastal LIDAR', 'Terrace Diagram', 'Progradational Timeline'];
+var toggleableLayerIds = ['DigitalGlobe Satellite Imagery', 'Tarndale LIDAR', 'Coastal LIDAR', 'Terrace Diagram', 'Lower Waipaoa Historical Imagery', 'Progradational Timeline'];
 
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
