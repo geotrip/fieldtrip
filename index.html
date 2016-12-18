@@ -219,7 +219,7 @@
   </div>   
   </div>
 <div id='attibution' class='att'>
- Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
+Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
     Coastal icon &copy; <a href=https://www.iconfinder.com/icons/1527307/ocean_sea_water_waves_icon#size=128> Alfredo Hernandez </a> (modified) <a href=https://creativecommons.org/licenses/by/3.0/legalcode>License</a>
 </div>
 
@@ -462,7 +462,7 @@ var journals = {
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwlex3mm00dn2qoihquwtx3x',
+    style: 'mapbox://styles/andrew84555/ciwlgsp1700d12ppaiytpmpui',
     center: [177.8664, - 38.4695],
     zoom: 9.5
     //20 is zoomed in, 0 is zoomed out
@@ -489,7 +489,7 @@ map.on('load', function() {
         'source': 'DigitalGlobe Satellite Imagery',
         'source-layer': 'DigitalGlobe Satellite Imagery',
 
-    });
+    },'labels-gis-52gd7r');
     map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 12, 20);        
     map.addSource('Coastal LIDAR', {
          type: 'image',
@@ -522,7 +522,7 @@ map.on('load', function() {
             id: 'Tarndale LIDAR',
             source: 'Tarndale LIDAR',
             type: 'raster',
-        });
+        },'labels-gis-52gd7r');
     map.setLayerZoomRange('Tarndale LIDAR', 11, 20);  
     map.addSource('progPoly', {
         'type': 'vector',
