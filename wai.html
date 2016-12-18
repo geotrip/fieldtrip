@@ -268,14 +268,14 @@ map.on('load', function() {
     });
     map.addSource('Proposed Marine Reserves (Dr Roger Grace)', {
         type: 'vector',
-        url: 'mapbox://andrew84555.8e1d02sy'
+        url: 'mapbox://andrew84555.5ith7uhu'
     });
 
     map.addLayer({
         "id": "Proposed Marine Reserves (Dr Roger Grace)",
         "type": "fill",
         "source": "Proposed Marine Reserves (Dr Roger Grace)",
-        "source-layer": "proposed_MR-811153",
+        "source-layer": "proposed_MR-5j1ocv",        
         "paint": {            
             "fill-color": "#ffff4d",
             "fill-outline-color": "#ffff4d",        
@@ -284,14 +284,14 @@ map.on('load', function() {
     },'labels-a0cld4');
     map.addSource('Proposed Marine Reserves (Waiheke Local Board)', {
         type: 'vector',
-        url: 'mapbox://andrew84555.028h1phd'
+        url: 'mapbox://andrew84555.dzkrxhx9'
     });
 
     map.addLayer({
         "id": "Proposed Marine Reserves (Waiheke Local Board)",
         "type": "fill",
         "source": "Proposed Marine Reserves (Waiheke Local Board)",
-        "source-layer": "WLB_prop_MR-7uokbv",
+        "source-layer": "MR_prop_WLB_GD-4h3n83",
         "paint": {            
             "fill-color": "#80ff80",
             "fill-outline-color": "#80ff80",        
@@ -466,7 +466,29 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
 }
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)'] });
 
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    var popup = new mapboxgl.Popup()
+        .setLngLat(map.unproject(e.point))
+        .setHTML('<i>Designation:  </i>' + feature.properties.name + '<i><br>Area:  </i>' + feature.properties.area + ' ha   ')
+        .addTo(map);
+});
+
+// Use the same approach as above to indicate that the symbols are clickable
+// by changing the cursor style to 'pointer'.
+map.on('mousemove', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)'] });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+});
 </script>
 
 </body>
