@@ -479,7 +479,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML('<i>Designation:  </i>' + feature.properties.name + '<i><br>Area:  </i>' + feature.properties.area + ' ha   ')
+        .setHTML('<i><b>Designation:  </i></b>' + feature.properties.name + '<i><b><br>Area:  </i></b>' + feature.properties.area + ' ha   ')
         .addTo(map);
 });
 
