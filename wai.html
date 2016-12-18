@@ -23,7 +23,7 @@
         font: 12px/20px 'Open Sans', sans-serif;
         position: absolute;
         width: 220px;
-        top: 350px;
+        top: 450px;
         left: 0;
         padding: 10px;
     }
@@ -137,6 +137,10 @@
     font: 20px/20px 'Open Sans', sans-serif;
     margin: 0 0 10px;
     }
+    .legend h3 {
+    font: 14px 'Open Sans', sans-serif;
+    margin: 0 0 10px;
+    }
 
     .legend div p {
     border-radius: 50%;
@@ -163,13 +167,15 @@
 </div>
 </div>
 <div id='legend' class='legend'>
-    <h4>Legend</h4>
-    <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Existing)<br>
-    <img src=images/P_MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Proposed)<br>
-    <img src=images/MF.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Farm<br>
+    <h4>Legend</h4>    
     <img src=images/RIV.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Waterway<br>
-    <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br><br>
-    <i><h4>Population density</h4></i>
+    <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br>
+    <img src=images/MF.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Farm<br>
+    <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Existing)<br><br>
+    <h3>Marine Protected Area (Proposed by):</h3>
+    <div><span style='background-color: #80ff80'></span> Waiheke Local Board</div>
+    <div><span style='background-color: #ffff4d'></span> Dr Roger Grace</div>   
+    <br><h4>Population density</h4>
     <div><span style='background-color: #E50025'></span>2000 per km2</div>
     <div><span style='background-color: #DD6000'></span>1600 per km2</div>    
     <div><span style='background-color: #CED500'></span>1200 per km2</div>    
@@ -255,22 +261,38 @@ map.on('load', function() {
             "fill-opacity": 0.5
         }
     });
-    map.addSource('Proposed Marine Reserves', {
+    map.addSource('Proposed Marine Reserves (Dr Roger Grace)', {
         type: 'vector',
         url: 'mapbox://andrew84555.8e1d02sy'
     });
 
     map.addLayer({
-        "id": "Proposed Marine Reserves",
+        "id": "Proposed Marine Reserves (Dr Roger Grace)",
         "type": "fill",
-        "source": "Proposed Marine Reserves",
+        "source": "Proposed Marine Reserves (Dr Roger Grace)",
         "source-layer": "proposed_MR-811153",
+        "paint": {            
+            "fill-color": "#ffff4d",
+            "fill-outline-color": "#ffff4d",        
+            "fill-opacity": 0.5
+        }
+    },'labels-a0cld4');
+    map.addSource('Proposed Marine Reserves (Waiheke Local Board)', {
+        type: 'vector',
+        url: 'mapbox://andrew84555.028h1phd'
+    });
+
+    map.addLayer({
+        "id": "Proposed Marine Reserves (Waiheke Local Board)",
+        "type": "fill",
+        "source": "Proposed Marine Reserves (Waiheke Local Board)",
+        "source-layer": "WLB_prop_MR-7uokbv",
         "paint": {            
             "fill-color": "#80ff80",
             "fill-outline-color": "#80ff80",        
             "fill-opacity": 0.5
         }
-    },'labels-a0cld4');  
+    },'labels-a0cld4');   
     map.addSource("population", {
         'type': 'vector',
         'url': 'mapbox://andrew84555.cyentrrn'
@@ -414,7 +436,7 @@ map.on('load', function() {
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Marine Farms', 'Bus route', 'Bus stops', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Marine Farms', 'Bus route', 'Bus stops', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
