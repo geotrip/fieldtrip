@@ -179,7 +179,8 @@
     <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Existing)<br><br>
     <h3>Marine Protected Area (Proposed by):</h3>
     <div><span style='background-color: #80ff80'></span> Waiheke Local Board</div>
-    <div><span style='background-color: #ffff4d'></span> Dr Roger Grace</div>   
+    <div><span style='background-color: #ffff4d'></span> Dr Roger Grace</div>
+    <div><span style='background-color: #FF0000'></span> Other</div>   
     <br><h4>Population density</h4>
     <div><span style='background-color: #E50025'></span>2000 per km2</div>
     <div><span style='background-color: #DD6000'></span>1600 per km2</div>    
@@ -249,7 +250,23 @@ map.on('load', function() {
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.5
         }
-    },'labels-a0cld4'); 
+    },'labels-a0cld4');
+    map.addSource('Other Proposed Reserves', {
+        type: 'vector',
+        url: 'mapbox://andrew84555.4q1qrnuw'
+    });
+
+    map.addLayer({
+        "id": "Other Proposed Reserves",
+        "type": "fill",
+        "source": "Other Proposed Reserves",
+        "source-layer": "other_proposed_MR-1qtyxi",
+        "paint": {            
+            "fill-color": "#FF0000",
+            "fill-outline-color": "#FF0000",        
+            "fill-opacity": 0.5
+        }
+    },'place-island');  
     map.addSource('Marine Farms', {
         type: 'vector',
         url: 'mapbox://andrew84555.4sbq994k'
@@ -441,7 +458,7 @@ map.on('load', function() {
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Marine Farms', 'Bus route', 'Bus stops', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
+var toggleableLayerIds = [ 'LINZ aerial imagery (2010)', '1940 Aerial', 'Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
@@ -467,7 +484,7 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves'] });
 
     if (!features.length) {
         return;
@@ -486,7 +503,7 @@ map.on('click', function (e) {
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
 map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 </script>
