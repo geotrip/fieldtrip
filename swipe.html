@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+body {
+    overflow: hidden;
+}
+
+body * {
+   -webkit-touch-callout: none;
+     -webkit-user-select: none;
+        -moz-user-select: none;
+         -ms-user-select: none;
+             user-select: none;
+}
+#menuLeft {
+        position: absolute;
+        background: #fff;
+        left: 10px;
+        padding: 10px;
+        border-radius: 3px;   
+        font-family: 'Open Sans', sans-serif;
+    }
+#menuRight {
+        position: absolute;
+        background: #fff;
+        right: 10px;
+        padding: 10px;
+        border-radius: 3px;         
+        font-family: 'Open Sans', sans-serif;
+    }
+.map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+</style>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.css' type='text/css' />
+
+<div id='before' class='map'></div>
+<div id='menuLeft'>
+    <input id='ciwwyj42b00i32pnxsw7sfgfu' type='radio' name='rtoggle' value='1940' checked='checked'>
+    <label for='1940'>1940</label>
+    <input id='ciwwwa4pl00hu2pnx14hna7v1' type='radio' name='rtoggle' value='1961'>
+    <label for='1961'>1961</label>
+    <input id='ciwwwv6wg00rw2qqoa0cj8vq9' type='radio' name='rtoggle' value='1981'>
+    <label for='1981'>1981</label>
+    <input id='ciwwxihog00i02pnxutc5zmhh' type='radio' name='rtoggle' value='1987'>
+    <label for='1987'>1987</label>
+    <input id='ciwwya0ca00s12qqo3knx57uo' type='radio' name='rtoggle' value='2001'>
+    <label for='2001'>2001</label>
+    <input id='ciwwy53i100552qpq833bkn45' type='radio' name='rtoggle' value='2010'>
+    <label for='2010'>2010</label>
+
+</div>
+<div id='after' class='map'></div>
+<div id='menuRight'>
+    <input id='ciwwyj42b00i32pnxsw7sfgfu' type='radio' name='rtoggle' value='1940'>
+    <label for='1940'>1940</label>
+    <input id='ciwwwa4pl00hu2pnx14hna7v1' type='radio' name='rtoggle' value='1961' checked='checked'>
+    <label for='1961'>1961</label>
+    <input id='ciwwwv6wg00rw2qqoa0cj8vq9' type='radio' name='rtoggle' value='1981'>
+    <label for='1981'>1981</label>
+    <input id='ciwwxihog00i02pnxutc5zmhh' type='radio' name='rtoggle' value='1987'>
+    <label for='1987'>1987</label>
+    <input id='ciwwya0ca00s12qqo3knx57uo' type='radio' name='rtoggle' value='2001'>
+    <label for='2001'>2001</label>
+    <input id='ciwwy53i100552qpq833bkn45' type='radio' name='rtoggle' value='2010'>
+    <label for='2010'>2010</label>
+
+</div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
+var beforeMap = new mapboxgl.Map({
+    container: 'before',
+    style: 'mapbox://styles/andrew84555/ciwwyj42b00i32pnxsw7sfgfu',
+    center: [175.1, - 36.8],
+    minZoom: 12,
+    zoom: 12
+});
+
+var afterMap = new mapboxgl.Map({
+    container: 'after',
+    style: 'mapbox://styles/andrew84555/ciwwwa4pl00hu2pnx14hna7v1',
+    center: [175.1, - 36.8],
+    minZoom: 12,
+    zoom: 12
+});
+
+
+var map = new mapboxgl.Compare(beforeMap, afterMap, {
+    // Set this to enable comparing two maps by mouse movement:
+    // mousemove: true
+});
+
+var leftLayerList = document.getElementById('menuLeft');
+var inputs = leftLayerList.getElementsByTagName('input');
+
+function switchLeftLayer(layer) {
+    var leftLayerId = layer.target.id;    
+    beforeMap.setStyle('mapbox://styles/andrew84555/' + leftLayerId);
+    
+}
+
+for (var i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = switchLeftLayer;
+}
+
+var rightLayerList = document.getElementById('menuRight');
+var inputs = rightLayerList.getElementsByTagName('input');
+
+function switchRightLayer(layer) {    
+    var rightLayerId = layer.target.id;    
+    afterMap.setStyle('mapbox://styles/andrew84555/' + rightLayerId);
+}
+
+for (var i = 0; i < inputs.length; i++) {
+    inputs[i].onclick = switchRightLayer
+}
+
+
+
+
+</script>
+
+</body>
+</html>
