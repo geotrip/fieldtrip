@@ -156,58 +156,43 @@
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
-var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/andrew84555/ciwubr4qs00om2qqogigyb3ct',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
-    zoom: 11
+    zoom: 11,
+    minZoom: 11,
+    maxZoom: 14
+
 });
 
-//iniatialise the slider
-var slider = document.getElementById('slider');
-var sliderValue = document.getElementById('slider-value');
-
 map.on('load', function() {
-    map.addSource('LINZ aerial imagery (2010)', {
-        type: 'raster',
-        url: 'mapbox://andrew84555.2wqkmrna',
-        tileSize: 256
-    });
-    map.addLayer({
-        'id': 'LINZ aerial imagery (2010)',
-        'type': 'raster',
-        'source': 'LINZ aerial imagery (2010)',
-        'source-layer': 'LINZ aerial imagery (2010)',
-    },'place-suburb');
-    map.setLayerZoomRange('LINZ aerial imagery (2010)', 13, 20);
-    map.addSource('Te Matuku Marine Reserve', {
-        type: 'vector',
-        url: 'mapbox://andrew84555.bjytnn67'
+    map.addSource("Te Matuku Marine Reserve", {
+        "type": 'geojson',
+        "data": 'json/matuku.geojson'
     });
 
     map.addLayer({
         "id": "Te Matuku Marine Reserve",
         "type": "fill",
-        "source": "Te Matuku Marine Reserve",
-        "source-layer": "existing_MR-d17gy1",
+        "source": "Te Matuku Marine Reserve",        
         "paint": {            
             "fill-color": "#0000ff",
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.5
         }
     },'labels-a0cld4');
+
     map.addSource('Other Proposed Reserves', {
-        type: 'vector',
-        url: 'mapbox://andrew84555.4q1qrnuw'
+        "type": 'geojson',
+        "data": 'json/other_proposed_MR.geojson'
     });
 
     map.addLayer({
         "id": "Other Proposed Reserves",
         "type": "fill",
         "source": "Other Proposed Reserves",
-        "source-layer": "other_proposed_MR-1qtyxi",
         "paint": {            
             "fill-color": "#FF0000",
             "fill-outline-color": "#FF0000",        
@@ -215,15 +200,14 @@ map.on('load', function() {
         }
     },'place-island');  
     map.addSource('Marine Farms', {
-        type: 'vector',
-        url: 'mapbox://andrew84555.4sbq994k'
+        type: 'geojson',
+        data: 'json/MF.geojson'
     });
 
     map.addLayer({
         "id": "Marine Farms",
         "type": "fill",
         "source": "Marine Farms",
-        "source-layer": "lds-nz-marine-farm-polygons-t-84mizx",
         "paint": {            
             "fill-color": "#ff6600",
             "fill-outline-color": "#ff6600",        
@@ -231,31 +215,28 @@ map.on('load', function() {
         }
     });
     map.addSource('Proposed Marine Reserves (Dr Roger Grace)', {
-        type: 'vector',
-        url: 'mapbox://andrew84555.5ith7uhu'
+        "type": 'geojson',
+        "data": 'json/roger_grace.geojson'
     });
 
     map.addLayer({
         "id": "Proposed Marine Reserves (Dr Roger Grace)",
         "type": "fill",
-        "source": "Proposed Marine Reserves (Dr Roger Grace)",
-        "source-layer": "proposed_MR-5j1ocv",        
+        "source": "Proposed Marine Reserves (Dr Roger Grace)",                
         "paint": {            
             "fill-color": "#ffff4d",
             "fill-outline-color": "#ffff4d",        
             "fill-opacity": 0.5
         }
-    },'labels-a0cld4');
-    map.addSource('Proposed Marine Reserves (Waiheke Local Board)', {
-        type: 'vector',
-        url: 'mapbox://andrew84555.3yfa2ddb'
     });
-
+    map.addSource('Proposed Marine Reserves (Waiheke Local Board)', {
+        "type": 'geojson',
+        "data": 'json/WLB_MR.geojson'
+    });
     map.addLayer({
         "id": "Proposed Marine Reserves (Waiheke Local Board)",
         "type": "fill",
         "source": "Proposed Marine Reserves (Waiheke Local Board)",
-        "source-layer": "wlb-2bs4o1",
         "paint": {            
             "fill-color": "#80ff80",
             "fill-outline-color": "#80ff80",        
@@ -263,13 +244,12 @@ map.on('load', function() {
         }
     },'place-suburb');   
     map.addSource("population", {
-        'type': 'vector',
-        'url': 'mapbox://andrew84555.cyentrrn'
+        'type': 'geojson',
+        'data': 'json/MB.geojson'
     });
     map.addLayer({
         'id': 'Population density 2001 (per km2)',
-        'source': 'population',
-        'source-layer': 'MB_norm-43nei4',        
+        'source': 'population',             
         'type': 'fill',
         'paint': {
             'fill-color': {
@@ -293,8 +273,7 @@ map.on('load', function() {
     }, 'waterway-label');
     map.addLayer({
         'id': 'Population density 2006 (per km2)',
-        'source': 'population',
-        'source-layer': 'MB_norm-43nei4',        
+        'source': 'population',              
         'type': 'fill',
         'paint': {
             'fill-color': {
@@ -318,8 +297,7 @@ map.on('load', function() {
     }, 'waterway-label');
     map.addLayer({
         'id': 'Population density 2013 (per km2)',
-        'source': 'population',
-        'source-layer': 'MB_norm-43nei4',        
+        'source': 'population',              
         'type': 'fill',
         'paint': {
             'fill-color': {
@@ -345,7 +323,7 @@ map.on('load', function() {
     map.addSource("Bus route", {
         //this pulls from a text file saved as a geojson, much cleaner than having it in the code. It can be in a folder or just in the same root folder as it is in here. The data was scraped from OSM, downloaded as a esri shapefile, and converted to a geojson file by uploading the zipped shapefile to mapshaper (www.mapshaper.org). 
         "type": "geojson", 
-        "data": "bus_waiheke.geojson"
+        "data": "json/bus_waiheke.geojson"
     });
     map.addLayer({
         "id": "Bus route",
@@ -374,7 +352,7 @@ map.on('load', function() {
      });
     map.addSource("Bus stops", {
         "type": "geojson", 
-        "data": "bus_stop.geojson"
+        "data": "json/bus_stop.geojson"
     });
     map.addLayer({
         "id": "Bus stops",
