@@ -52,47 +52,6 @@
         background-color: #fff;
         color: #404040;             
     }
-    .filter-group {
-        font: 12px/20px 'Open Sans', sans-serif;
-        position: absolute;
-        bottom: 25px;
-        right: 10px;
-        z-index: 1;
-        border-radius: 3px;
-        width: 120px;
-        color: #fff;
-    }
-    .filter-group input[type=checkbox]:first-child + label {
-        border-radius: 3px 3px 0 0;
-    }
-    .filter-group label:last-child {
-        border-radius: 0 0 3px 3px;
-        border: none;
-    }
-    .filter-group input[type=checkbox] {
-        display: none;
-    }
-    .filter-group input[type=checkbox] + label {
-        background-color: #3386c0;
-        display: block;
-        cursor: pointer;
-        padding: 10px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    }
-    .filter-group input[type=checkbox] + label {
-        color: #404040;
-        background-color: #fff;
-        text-transform: capitalize;
-    }
-    .filter-group input[type=checkbox] + label:hover,
-    .filter-group input[type=checkbox]:checked + label {
-        color: #404040;
-    }
-    .filter-group input[type=checkbox]:checked + label:before {
-        color: #404040;
-        content: '✔';
-        margin-right: 5px;
-    }
     .legend {
     background-color: #fff;
     border-radius: 3px;
@@ -155,10 +114,10 @@
   </div>
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwubr4qs00om2qqogigyb3ct',
+    style: 'mapbox://styles/mapbox/outdoors-v9',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
     zoom: 11,
@@ -337,19 +296,7 @@ map.on('load', function() {
             "line-color": "#ff8080",
             "line-width": 4
         }
-    },'place-suburb');
-    map.addLayer({
-        "id": "labels",
-        "type": "symbol",
-        "source": "Bus route",
-        "layout": {
-            //this means your labels follow the line, looks much nicer than if they just float free. 
-            "symbol-placement": 'line',
-            "text-field": "{name}",//just pulls from the geojson.
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-size": 11,
-        }
-     });
+    },'road-label-large','road-label-medium', 'road-label-small');
     map.addSource("Bus stops", {
         "type": "geojson", 
         "data": "json/bus_stop.geojson"

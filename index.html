@@ -64,6 +64,13 @@
         margin: 0;
         cursor: ew-resize;
     }
+    .marker {
+        display: block;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 0;
+}
     #menu {
         
         background-color: #595959;
@@ -93,56 +100,6 @@
     #menu a.active {
         background-color: #fff;
         color: #404040;        
-    }
-
-    .filter-group {
-        font: 12px/20px 'Open Sans', sans-serif;
-        position: absolute;
-        bottom: 25px;
-        left: 10px;
-        z-index: 1;
-        border-radius: 3px;
-        width: 120px;
-        color: #fff;
-    }
-
-    .filter-group input[type=checkbox]:first-child + label {
-        border-radius: 3px 3px 0 0;
-    }
-
-    .filter-group label:last-child {
-        border-radius: 0 0 3px 3px;
-        border: none;
-    }
-
-    .filter-group input[type=checkbox] {
-        display: none;
-    }
-
-    .filter-group input[type=checkbox] + label {
-        background-color: #3386c0;
-        display: block;
-        cursor: pointer;
-        padding: 10px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    }
-
-    .filter-group input[type=checkbox] + label {
-    	color: #404040;
-        background-color: #fff;
-        text-transform: capitalize;
-    }
-
-    .filter-group input[type=checkbox] + label:hover,
-    .filter-group input[type=checkbox]:checked + label {
-        color: #404040;
-
-    }
-
-    .filter-group input[type=checkbox]:checked + label:before {
-        color: #404040;
-        content: '✔';
-        margin-right: 5px;
     }
     .legend {
     background-color: #fff;
@@ -224,7 +181,7 @@ Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
 
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
 var journals = {
     "type": "FeatureCollection",
     "features": [{
@@ -288,7 +245,7 @@ var journals = {
             "info": "H. Ogawa, M.E. Dickson, P.S. Kench",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0278434311001683\" target=\"_blank\">Link to article</a>",
             "title": "Wave transformation on a sub-horizontal shore platform, Tatapouri, North Island, New Zealand",
-            "icon": "coastal"
+            "icon": "url(images/coastal.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -301,7 +258,7 @@ var journals = {
             "info": "Andrea J. Miller, Steven A. Kuehl",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002898\" target=\"_blank\">Link to article</a>",
             "title": "Shelf sedimentation on a tectonically active margin: A modern sediment budget for Poverty continental shelf, New Zealand",
-            "icon": "coastal"
+            "icon": "url(images/coastal.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -314,7 +271,7 @@ var journals = {
             "info": "C.R. Alexander, J.P. Walsh, A.R. Orpin",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002862\" target=\"_blank\">Link to article</a>",
             "title": "Modern sediment dispersal and accumulation on the outer Poverty continental margin",
-            "icon": "coastal"
+            "icon": "url(images/coastal.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -328,8 +285,8 @@ var journals = {
             "info":"M.A. Wolinsky, J.B. Swenson, N. Litchfield, J.E. McNinch",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002928\" target=\"_blank\">Link to article</a>",
             "title": "Coastal progradation and sediment partitioning in the Holocene Waipaoa Sedimentary System, New Zealand",
-            "icon": "coastal"
-        },
+            "icon": "url(images/coastal.svg)"
+    },
         "geometry": {
             "type": "Point",
             "coordinates": [177.889078,-38.6263790]
@@ -341,7 +298,7 @@ var journals = {
             "info": "Ian C. Fuller, Mike Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002667\" target=\"_blank\">Link to article</a>",
             "title": "Rapid channel response to variability in sediment supply: Cutting and filling of the Tarndale Fan, Waipaoa catchment, New Zealand",
-            "icon": "hillslope"
+            "icon": "url(images/hillslope.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -354,7 +311,7 @@ var journals = {
             "info": "Aaron J. Bever, Jesse E. McNinch, Courtney K. Harrisa",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0278434310003705\" target=\"_blank\">Link to article</a>", 
             "title": "Hydrodynamics and sediment-transport in the nearshore of Poverty Bay, New Zealand: Observations of nearshore sediment segregation and oceanic storms",
-            "icon": "coastal"
+            "icon": "url(images/coastal.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -367,7 +324,7 @@ var journals = {
             "info": "Ian C. Fuller, Mike Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0169555X10005490\" target=\"_blank\">Link to article</a>",
                 "title": "Slope–channel coupling in steepland terrain: A field-based conceptual model from the Tarndale gully and fan, Waipaoa catchment, New Zealand",
-            "icon": "hillslope"
+            "icon": "url(images/hillslope.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -380,7 +337,7 @@ var journals = {
             "info": "Mike Marden, Alexander Herzig and Gregory Arnold",
             "link": "<a href=\"http://search.informit.com.au.ezproxy.auckland.ac.nz/fullText;dn=314948408601241;res=IELNZC\" target=\"_blank\">Link to article</a>",
                 "title": "Gully degradation, stabilisation and effectiveness of reforestation in reducing gully-derived sediment, East Coast region, North Island, New Zealand",
-            "icon": "hillslope"
+            "icon": "url(images/hillslope.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -393,7 +350,7 @@ var journals = {
             "info": "Marden, Michael, Greg Arnold, Basil Gomez, and Donna Rowan",
             "link": "<a href=\"http://www.nsf-margins.org/S2S/2009/Waipaoa_fieldtrip/Marden%20et%20al.pdf\" target=\"_blank\">Link to article</a>",
                 "title": "Pre‐and post‐reforestation gully development in Mangatu Forest, East Coast, North Island, New Zealand",
-            "icon": "hillslope"
+            "icon": "url(images/hillslope.svg)"
         },
         "geometry": {
             "type": "Point",
@@ -407,7 +364,7 @@ var journals = {
             "info": "Kathleen M. Marsaglia, Alissa M. DeVaughn, Dawn E. James, Michael Marden",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709002886\" target=\"_blank\">Link to article</a>",
             "title": "Provenance of fluvial terrace sediments within the Waipaoa sedimentary system and their importance to New Zealand source-to-sink studies",
-            "icon": 'fluvial'
+            "icon": 'url(images/fluvial.svg)'
             },
             "geometry": {
                 "type": "Point",
@@ -421,7 +378,7 @@ var journals = {
             "info": "A. J. Kettner, B. Gomez, and J. P. M. Syvitski",
             "link": "<a href=\"http://onlinelibrary.wiley.com.ezproxy.auckland.ac.nz/doi/10.1029/2006WR005570/abstract\" target=\"_blank\">Link to article</a>",
             "title": "Modeling suspended sediment discharge from the Waipaoa River system, New Zealand: The last 3000 years",
-            "icon": 'fluvial'
+            "icon": 'url(images/fluvial.svg)'
             },
             "geometry": {
                 "type": "Point",
@@ -435,7 +392,7 @@ var journals = {
             "info": "Lionel Carter, Alan R. Orpin, Steven A. Kuehl",
             "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0025322709003387\" target=\"_blank\">Link to article</a>",
             "title": "From mountain source to ocean sink – the passage of sediment across an active  margin, Waipaoa Sedimentary System, New Zealand",
-            "icon": 'fluvial'
+            "icon": 'url(images/fluvial.svg)'
             },
             "geometry": {
                 "type": "Point",
@@ -449,7 +406,7 @@ var journals = {
                 "info": "Jonathan D. Phillips and Basil Gomez",
                 "link": "<a href=\"http://onlinelibrary.wiley.com/doi/10.1111/j.1365-2117.2007.00325.x/abstract\" target=\"_blank\">Link to article</a>",
                 "title": "Controls on sediment export from the Waipaoa River basin, New Zealand",
-                "icon": 'fluvial'
+                "icon": 'url(images/fluvial.svg)'
             },
             "geometry": {
                 "type": "Point",
@@ -462,7 +419,7 @@ var journals = {
                 "info": "Basil Gomez and David M. Livingston",
                 "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0169555X12001249\" target=\"_blank\">Link to article</a>",
                 "title": "The river it goes right on: Post-glacial landscape evolution in the upper Waipaoa River basin, eastern North Island, New Zealand",
-                "icon": 'fluvial'
+                "icon": 'url(images/fluvial.svg)'
             },
             "geometry": {
                 "type": "Point",
@@ -474,7 +431,7 @@ var journals = {
 var filterGroup = document.getElementById('filter-group');
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/andrew84555/ciwlgsp1700d12ppaiytpmpui',
+    style: 'mapbox://styles/mapbox/outdoors-v9',
     center: [177.8664, - 38.4695],
     zoom: 9.5
     //20 is zoomed in, 0 is zoomed out
@@ -502,7 +459,7 @@ map.on('load', function() {
         'source-layer': 'DigitalGlobe Satellite Imagery',
 
     },'labels-gis-52gd7r');
-    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 12, 20);     
+    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 13, 20);     
     map.addSource('Coastal LIDAR', {
          type: 'image',
          url: 'images/coast.png',
@@ -567,15 +524,14 @@ map.on('load', function() {
         },'labels-gis-52gd7r');
     map.setLayerZoomRange('Terrace Diagram', 10, 20); 
     map.addSource('progPoly', {
-        'type': 'vector',
-        url: 'mapbox://andrew84555.9pfnqg2h'
+        'type': 'geojson',
+        data: 'json/prog.geojson'
     });
   
     map.addLayer({
         'id': 'Progradational Timeline',
         'type': 'fill',
-        'source': 'progPoly',
-        'source-layer': 'prog-83r8dg',        
+        'source': 'progPoly',                
         'paint': {
             "fill-color": {
                 property: 'OBJECTID',
@@ -614,62 +570,30 @@ map.on('load', function() {
 
     
 
-    journals.features.forEach(function(feature) {
-        var symbol = feature.properties['icon'];
-        var layerID = 'poi-' + symbol;
-
-        // Add a layer for this symbol type if it hasn't been added already.
-        if (!map.getLayer(layerID)) {
-            map.addLayer({
-                "id": layerID,
-                "type": "symbol",
-                "source": "journals",
-                "layout": {
-                    "icon-image": symbol,
-                    "icon-allow-overlap": true
-                },
-                "filter": ["==", "icon", symbol]
-            });
-
-            // Add checkbox and label elements for the layer.
-            var input = document.createElement('input');
-            input.type = 'checkbox';
-            input.id = layerID;
-            input.checked = true;
-            filterGroup.appendChild(input);
-
-            var label = document.createElement('label');
-            label.setAttribute('for', layerID);
-            label.textContent = symbol;
-            filterGroup.appendChild(label);
-
-            // When the checkbox changes, update the visibility of the layer.
-            input.addEventListener('change', function(e) {
-                map.setLayoutProperty(layerID, 'visibility',
-                    e.target.checked ? 'visible' : 'none');
-            });
-        }
-    });
-});
-
-
-map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-youtube'] });
-
-    if (!features.length) {
-        return;
-    }
-
-    var feature = features[0];
-
-    // Populate the popup and set its coordinates
-    // based on the feature found.
-    var popup = new mapboxgl.Popup()
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML('<h2 ALIGN=center>' + feature.properties.title + '</h2><P ALIGN=center><i>' + feature.properties.info + '<br></i>'+ feature.properties.link + '</p><p>'+ feature.properties.description + '</p>')
+// add markers to map
+journals.features.forEach(function(marker) {
+    //add popups to each marker instance, otherwise you only get one popup
+    var popup = new mapboxgl.Popup({offset:[0, -30]})
+    //organise what is shown in the popup
+    .setHTML('<h2 ALIGN=center>' + marker.properties.title + '</h2><P ALIGN=center><i>' + marker.properties.info + '<br></i>'+ marker.properties.link + '</p><p>'+ marker.properties.description + '</p>');
+    // create a DOM element for the marker
+    var el = document.createElement('div');
+    el.className = 'marker';
+    el.style.backgroundImage = marker.properties.icon;
+    //the pdf icon comes from freeiconshop.com, need to attribute
+    //set how big the marker icons appear, independent of scale
+    el.style.width = 40 + 'px';
+    el.style.height = 40 + 'px';
+    //add markers to map, with an offset half that of the width and height to position correctly    
+    new mapboxgl.Marker(el, {offset: [-20, -20]})
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(popup)
         .addTo(map);
+});
+
 
 });
+
 
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
