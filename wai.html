@@ -201,7 +201,27 @@ map.on('load', function() {
             "fill-outline-color": "#80ff80",        
             "fill-opacity": 0.5
         }
-    },'place-suburb');   
+    },'place-suburb');
+    map.addSource('rivers', {
+        "type": 'geojson',
+        "data": 'json/rivers.geojson'
+    });
+    map.addLayer({
+        "id": "Waterways",
+        "type": "line",
+        "source": "rivers",
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round",
+            
+        },
+        "paint": {
+            "line-color": "#0066ff",
+            "line-width": 1,
+            "line-dasharray": [1, 2]
+            }
+    },'place-suburb');
+ 
     map.addSource("population", {
         'type': 'geojson',
         'data': 'json/MB.geojson'
@@ -318,7 +338,7 @@ map.on('load', function() {
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
+var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Waterways', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
