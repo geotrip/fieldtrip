@@ -181,7 +181,7 @@ Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
 
 
 <script>
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
 var journals = {
     "type": "FeatureCollection",
     "features": [{
@@ -433,7 +433,9 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/outdoors-v9',
     center: [177.8664, - 38.4695],
-    zoom: 9.5
+    zoom: 9.5,
+    minZoom: 9.5,
+    maxZoom: 16 
     //20 is zoomed in, 0 is zoomed out
 });
 var slider = document.getElementById('slider');
@@ -450,7 +452,7 @@ map.on('load', function() {
     map.addSource('DigitalGlobe Satellite Imagery', {
         type: 'raster',
         url: 'mapbox://mapbox.satellite',
-        tileSize: 256
+        tileSize: 512
     });
     map.addLayer({
         'id': 'DigitalGlobe Satellite Imagery',
@@ -459,7 +461,7 @@ map.on('load', function() {
         'source-layer': 'DigitalGlobe Satellite Imagery',
 
     },'labels-gis-52gd7r');
-    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 13, 20);     
+    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 14, 20);     
     map.addSource('Coastal LIDAR', {
          type: 'image',
          url: 'images/coast.png',
