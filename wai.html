@@ -115,14 +115,21 @@
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
+var bounds = [
+    [174.79283, -36.90548],
+    [175.235291, -36.698655]
+];
+
 var map = new mapboxgl.Map({
     container: 'map',
-    style: 'mapbox://styles/mapbox/outdoors-v9',
+    style: 'mapbox://styles/andrew84555/cixqu0baq00052sp261tqlqxa',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
-    zoom: 11,
-    minZoom: 11,
-    maxZoom: 14
+    zoom: 12,
+    minZoom: 12,
+    maxZoom: 14,
+    maxBounds: bounds
+    
 
 });
 
@@ -141,7 +148,7 @@ map.on('load', function() {
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.5
         }
-    },'labels-a0cld4');
+    },'place_label_other');
 
     map.addSource('Other Proposed Reserves', {
         "type": 'geojson',
@@ -157,7 +164,7 @@ map.on('load', function() {
             "fill-outline-color": "#FF0000",        
             "fill-opacity": 0.5
         }
-    },'place-island');  
+    },'place_label_other');  
     map.addSource('Marine Farms', {
         type: 'geojson',
         data: 'json/MF.geojson'
@@ -201,7 +208,7 @@ map.on('load', function() {
             "fill-outline-color": "#80ff80",        
             "fill-opacity": 0.5
         }
-    },'place-suburb');
+    },'place_label_other');
     map.addSource('rivers', {
         "type": 'geojson',
         "data": 'json/rivers.geojson'
@@ -220,7 +227,7 @@ map.on('load', function() {
             "line-width": 1,
             "line-dasharray": [1, 2]
             }
-    },'place-suburb');
+    },'place_label_other');
  
     map.addSource("population", {
         'type': 'geojson',
@@ -249,7 +256,7 @@ map.on('load', function() {
             },
             'fill-opacity': 1
         }
-    }, 'waterway-label');
+    }, 'place_label_other');
     map.addLayer({
         'id': 'Population density 2006 (per km2)',
         'source': 'population',              
@@ -273,7 +280,7 @@ map.on('load', function() {
             },
             'fill-opacity': 1
         }
-    }, 'waterway-label');
+    }, 'place_label_other');
     map.addLayer({
         'id': 'Population density 2013 (per km2)',
         'source': 'population',              
@@ -297,7 +304,7 @@ map.on('load', function() {
             },
             'fill-opacity': 1
         }
-    }, 'waterway-label');
+    }, 'place_label_other');
 
     map.addSource("Bus route", {
         //this pulls from a text file saved as a geojson, much cleaner than having it in the code. It can be in a folder or just in the same root folder as it is in here. The data was scraped from OSM, downloaded as a esri shapefile, and converted to a geojson file by uploading the zipped shapefile to mapshaper (www.mapshaper.org). 
@@ -316,7 +323,19 @@ map.on('load', function() {
             "line-color": "#ff8080",
             "line-width": 4
         }
-    },'road-label-large','road-label-medium', 'road-label-small');
+    },'place_label_other');
+    map.addLayer({
+        "id": "labels",
+        "type": "symbol",
+        "source": "Bus route",
+        "layout": {
+            //this means your labels follow the line, looks much nicer than if they just float free. 
+            "symbol-placement": 'line',
+            "text-field": "{name}",//just pulls from the geojson.
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-size": 11,
+        }
+     });
     map.addSource("Bus stops", {
         "type": "geojson", 
         "data": "json/bus_stop.geojson"
