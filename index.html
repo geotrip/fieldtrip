@@ -429,13 +429,18 @@ var journals = {
 };
 
 var filterGroup = document.getElementById('filter-group');
+var bounds = [
+    [177, -39.1917840], // Southwest coordinates
+    [179, -37.9815305]  // Northeast coordinates
+];
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/outdoors-v9',
-    center: [177.8664, - 38.4695],
+    center: [177.9482912, - 38.57],
     zoom: 9.5,
     minZoom: 9.5,
-    maxZoom: 16 
+    maxZoom: 16,
+    maxBounds: bounds 
     //20 is zoomed in, 0 is zoomed out
 });
 var slider = document.getElementById('slider');
