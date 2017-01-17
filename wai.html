@@ -348,6 +348,18 @@ map.on('load', function() {
             "icon-image": "toilet-15",
         }
     });
+    map.addSource("Ferry", {
+        "type": "geojson", 
+        "data": "json/ferry.geojson"
+    });
+    map.addLayer({
+        "id": "Ferry Terminals",
+        "type": "symbol",
+        "source": "Ferry",
+        "layout": {
+            "icon-image": "ferry-15",
+        }
+    });
     map.addSource("Bus stops", {
         "type": "geojson", 
         "data": "json/bus_stop.geojson"
@@ -369,7 +381,7 @@ map.on('load', function() {
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Waterways', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
+var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Ferry Terminals', 'Toilets', 'Waterways', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
