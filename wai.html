@@ -336,6 +336,18 @@ map.on('load', function() {
             "text-size": 11,
         }
      });
+    map.addSource("Toilets", {
+        "type": "geojson", 
+        "data": "json/toilet.geojson"
+    });
+    map.addLayer({
+        "id": "Toilets",
+        "type": "symbol",
+        "source": "Toilets",
+        "layout": {
+            "icon-image": "toilet-15",
+        }
+    });
     map.addSource("Bus stops", {
         "type": "geojson", 
         "data": "json/bus_stop.geojson"
@@ -353,7 +365,7 @@ map.on('load', function() {
             "text-anchor": "left"
         }
     });
-    map.setLayerZoomRange('Bus stops', 14, 20);          
+    map.setLayerZoomRange('Bus stops', 14, 20);           
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
