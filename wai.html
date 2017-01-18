@@ -116,8 +116,8 @@
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
 var bounds = [
-    [174.79283, -36.9550926588],
-    [175.235291, -36.698655]
+    [174.9026590331, -36.9550926588],
+    [175.2885053471, -36.698655]
 ];
 
 var map = new mapboxgl.Map({
@@ -147,7 +147,7 @@ map.on('load', function() {
             id: 'Turbidity Overlay',
             source: 'Turbidity',
             type: 'raster',
-        }); 
+        },'place_label_other'); 
     map.addSource("Te Matuku Marine Reserve", {
         "type": 'geojson',
         "data": 'json/matuku.geojson'
@@ -162,7 +162,7 @@ map.on('load', function() {
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.5
         }
-    });
+    },'place_label_other');
 
     map.addSource('Other Proposed Reserves', {
         "type": 'geojson',
@@ -193,7 +193,7 @@ map.on('load', function() {
             "fill-outline-color": "#ff6600",        
             "fill-opacity": 0.5
         }
-    });
+    },'place_label_other');
     map.addSource('Proposed Marine Reserves (Dr Roger Grace)', {
         "type": 'geojson',
         "data": 'json/roger_grace.geojson'
@@ -208,7 +208,7 @@ map.on('load', function() {
             "fill-outline-color": "#ffff4d",        
             "fill-opacity": 0.5
         }
-    });
+    },'place_label_other');
     map.addSource('Proposed Marine Reserves (Waiheke Local Board)', {
         "type": 'geojson',
         "data": 'json/WLB_MR.geojson'
@@ -361,7 +361,7 @@ map.on('load', function() {
         "layout": {
             "icon-image": "toilet-15",
         }
-    });
+    },'place_label_other');
     map.addSource("Ferry", {
         "type": "geojson", 
         "data": "json/ferry.geojson"
@@ -421,7 +421,7 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves', 'Ferry Terminals'] });
 
     if (!features.length) {
         return;
@@ -433,14 +433,14 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML(feature.properties.name + '<i><b><br>Area:  </i></b>' + feature.properties.area + ' ha   ')
+        .setHTML(feature.properties.name)
         .addTo(map);
 });
 
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
 map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves', 'Ferry Terminals'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 </script>
