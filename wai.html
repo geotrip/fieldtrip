@@ -132,7 +132,6 @@ var map = new mapboxgl.Map({
     
 
 });
-
 map.on('load', function() {
     map.addSource('Turbidity', {
             type: 'image',
@@ -163,7 +162,7 @@ map.on('load', function() {
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.5
         }
-    },'place_label_other');
+    });
 
     map.addSource('Other Proposed Reserves', {
         "type": 'geojson',
@@ -179,7 +178,7 @@ map.on('load', function() {
             "fill-outline-color": "#FF0000",        
             "fill-opacity": 0.5
         }
-    },'place_label_other');  
+    });  
     map.addSource('Marine Farms', {
         type: 'geojson',
         data: 'json/MF.geojson'
