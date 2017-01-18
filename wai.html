@@ -134,6 +134,21 @@ var map = new mapboxgl.Map({
 });
 
 map.on('load', function() {
+    map.addSource('Turbidity', {
+            type: 'image',
+            url: 'images/turb.png',
+            coordinates: [
+                [174.9026590331, -36.6761008308],
+                [175.2885053471, -36.6761008308],
+                [175.2885053471, -36.9550926588],
+                [174.9026590331, -36.9550926588]
+            ]
+        });
+    map.addLayer({
+            id: 'Turbidity Overlay',
+            source: 'Turbidity',
+            type: 'raster',
+        }); 
     map.addSource("Te Matuku Marine Reserve", {
         "type": 'geojson',
         "data": 'json/matuku.geojson'
@@ -377,11 +392,11 @@ map.on('load', function() {
             "text-anchor": "left"
         }
     });
-    map.setLayerZoomRange('Bus stops', 14, 20);           
+    map.setLayerZoomRange('Bus stops', 14, 20);    
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Ferry Terminals', 'Toilets', 'Waterways', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)'];
+var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Ferry Terminals', 'Toilets', 'Waterways', 'Population density 2001 (per km2)','Population density 2006 (per km2)', 'Population density 2013 (per km2)', 'Turbidity Overlay'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
