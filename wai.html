@@ -94,7 +94,9 @@
 <div id='map'></div>
 </div>
 <div id='legend' class='legend'>
-    <h4>Legend</h4>    
+    <h4>Legend</h4>
+    <img src=images/ferry.png style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Ferry Terminal<br>
+    <img src=images/toilet.png style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Public Toilet<br>    
     <img src=images/RIV.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Waterway<br>
     <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br>
     <img src=images/MF.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Farm<br>
@@ -116,8 +118,8 @@
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
 var bounds = [
-    [174.9026590331, -36.9550926588],
-    [175.2885053471, -36.698655]
+    [174.8, -37],
+    [175.4, -36.6]
 ];
 
 var map = new mapboxgl.Map({
@@ -125,8 +127,8 @@ var map = new mapboxgl.Map({
     style: 'mapbox://styles/andrew84555/cixqu0baq00052sp261tqlqxa',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
     center: [175.1080, - 36.80],
-    zoom: 12,
-    minZoom: 12,
+    zoom: 10,
+    minZoom: 10,
     maxZoom: 14,
     maxBounds: bounds
     
