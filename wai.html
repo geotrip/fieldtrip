@@ -118,8 +118,8 @@
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
 var bounds = [
-    [174.75, -37],
-    [175.45, -36.6]
+    [174.8, -37],
+    [175.4, -36.6]
 ];
 
 var map = new mapboxgl.Map({
@@ -270,7 +270,8 @@ map.on('load', function() {
                     [2000, '#E50025']
                 ]
             },
-            'fill-opacity': 1
+            'fill-opacity': 1,
+            'fill-outline-color': '#000000'
         }
     }, 'place_label_other');
     map.addLayer({
@@ -294,7 +295,8 @@ map.on('load', function() {
                     [2000, '#E50025']
                 ]
             },
-            'fill-opacity': 1
+            'fill-opacity': 1,
+            'fill-outline-color': '#000000'
         }
     }, 'place_label_other');
     map.addLayer({
@@ -318,7 +320,8 @@ map.on('load', function() {
                     [2000, '#E50025']
                 ]
             },
-            'fill-opacity': 1
+            'fill-opacity': 1,
+            'fill-outline-color': '#000000'
         }
     }, 'place_label_other');
 
@@ -439,10 +442,62 @@ map.on('click', function (e) {
         .addTo(map);
 });
 
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Population density 2013 (per km2)'] });
+
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    var popup = new mapboxgl.Popup()
+        .setLngLat(map.unproject(e.point))
+        .setHTML("2013 Population Density: " + Math.round(feature.properties.NORM_13) + " people per km2")
+        .addTo(map);
+});
+
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Population density 2006 (per km2)'] });
+
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    var popup = new mapboxgl.Popup()
+        .setLngLat(map.unproject(e.point))
+        .setHTML("2006 Population Density: " + Math.round(feature.properties.NORM_06) + " people per km2")
+        .addTo(map);
+});
+
+map.on('click', function (e) {
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Population density 2001 (per km2)'] });
+
+    if (!features.length) {
+        return;
+    }
+
+    var feature = features[0];
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    var popup = new mapboxgl.Popup()
+        .setLngLat(map.unproject(e.point))
+        .setHTML("2001 Population Density: " + Math.round(feature.properties.NORM_01) + " people per km2")
+        .addTo(map);
+});
+
+
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
 map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves', 'Ferry Terminals'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Population density 2001 (per km2)', 'Population density 2006 (per km2)', 'Population density 2013 (per km2)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves', 'Ferry Terminals'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 </script>
