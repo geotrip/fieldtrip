@@ -15,7 +15,7 @@
 
 <style>
     .mapboxgl-popup {
-        max-width: 400px;
+        max-width: 180px;
         font: 12px/20px 'Open Sans', sans-serif;
         z-index: 1
     }
@@ -455,7 +455,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML("2013 Population: " + Math.round(feature.properties.Pop_13))
+        .setHTML("2013 Population: <b>" + Math.round(feature.properties.Pop_13) +"</b>\nMeshblock ID: <b>" + feature.properties.MBID +"</b>")
         .addTo(map);
 });
 
@@ -472,7 +472,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML("2006 Population: " + Math.round(feature.properties.Pop_06))
+        .setHTML("2006 Population: <b>" + Math.round(feature.properties.Pop_06) +"</b>\nMeshblock ID: <b>" + feature.properties.MBID +"</b>")
         .addTo(map);
 });
 
@@ -489,7 +489,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML("2001 Population: " + Math.round(feature.properties.Pop_01))
+        .setHTML("2001 Population: <b>" + Math.round(feature.properties.Pop_01) +"</b>\nMeshblock ID: <b>" + feature.properties.MBID +"</b>")
         .addTo(map);
 });
 
