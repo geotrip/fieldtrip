@@ -100,12 +100,10 @@
     <img src=images/RIV.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Waterway<br>
     <img src=images/BUS.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Bus Route<br>
     <img src=images/MF.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Farm<br>
-    <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Marine Reserve (Existing)<br><br>
-    <h3>Marine Protected Area (Proposed by):</h3>
-    <div><span style='background-color: #80ff80'></span> Waiheke Local Board</div>
-    <div><span style='background-color: #ffff4d'></span> Dr Roger Grace</div>
-    <div><span style='background-color: #FF0000'></span> Other</div>   
-    <br><h3>Meshblock population per census year</h3>
+    <img src=images/MR.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Existing Marine Reserve<br>
+    <img src=images/MRP.PNG style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Proposed Marine Reserve<br>
+
+    <br><h3>Meshblock population as of census year</h3>
     <div><span style='background-color: #E50025'></span>More than 200</div>
     <div><span style='background-color: #DD6000'></span>180</div>    
     <div><span style='background-color: #CED500'></span>140</div>    
@@ -126,9 +124,9 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/andrew84555/cixqu0baq00052sp261tqlqxa',
     //this is just the basic mapbox outdoor style, but with road markers removed so they do not conflict with the bus route one.
-    center: [175.1080, - 36.80],
-    zoom: 10,
-    minZoom: 10,
+    center: [175.1, - 36.80],
+    zoom: 11.5,
+    minZoom: 11,
     maxZoom: 14,
     maxBounds: bounds
     
@@ -164,26 +162,10 @@ map.on('load', function() {
             "fill-outline-color": "#0000ff",        
             "fill-opacity": 0.5
         }
-    },'place_label_other');
-
-    map.addSource('Other Proposed Reserves', {
-        "type": 'geojson',
-        "data": 'json/other_proposed_MR.geojson'
-    });
-
-    map.addLayer({
-        "id": "Other Proposed Reserves",
-        "type": "fill",
-        "source": "Other Proposed Reserves",
-        "paint": {            
-            "fill-color": "#FF0000",
-            "fill-outline-color": "#FF0000",        
-            "fill-opacity": 0.5
-        }
-    });  
+    },'place_label_other');   
     map.addSource('Marine Farms', {
         type: 'geojson',
-        data: 'json/MF.geojson'
+        data: 'json/marine_farm.geojson'
     });
 
     map.addLayer({
@@ -196,32 +178,18 @@ map.on('load', function() {
             "fill-opacity": 0.5
         }
     },'place_label_other');
-    map.addSource('Proposed Marine Reserves (Dr Roger Grace)', {
+    map.addSource("Proposed Marine Reserves", {
         "type": 'geojson',
-        "data": 'json/roger_grace.geojson'
+        "data": 'json/proposed_MR.geojson'
     });
 
     map.addLayer({
-        "id": "Proposed Marine Reserves (Dr Roger Grace)",
+        "id": "Proposed Marine Reserves",
         "type": "fill",
-        "source": "Proposed Marine Reserves (Dr Roger Grace)",                
+        "source": "Proposed Marine Reserves",                
         "paint": {            
-            "fill-color": "#ffff4d",
-            "fill-outline-color": "#ffff4d",        
-            "fill-opacity": 0.5
-        }
-    },'place_label_other');
-    map.addSource('Proposed Marine Reserves (Waiheke Local Board)', {
-        "type": 'geojson',
-        "data": 'json/WLB_MR.geojson'
-    });
-    map.addLayer({
-        "id": "Proposed Marine Reserves (Waiheke Local Board)",
-        "type": "fill",
-        "source": "Proposed Marine Reserves (Waiheke Local Board)",
-        "paint": {            
-            "fill-color": "#80ff80",
-            "fill-outline-color": "#80ff80",        
+            "fill-color": "#FF0000",
+            "fill-outline-color": "#FF0000",        
             "fill-opacity": 0.5
         }
     },'place_label_other');
@@ -247,7 +215,7 @@ map.on('load', function() {
  
     map.addSource("population", {
         'type': 'geojson',
-        'data': 'json/MB.geojson'
+        'data': 'json/meshblocks.geojson'
     });
     map.addLayer({
         'id': '2001 Population',
@@ -400,7 +368,7 @@ map.on('load', function() {
 });
 
 //just stick the ids of the layers you want to be able to turn off and on here.
-var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves (Waiheke Local Board)', 'Proposed Marine Reserves (Dr Roger Grace)', 'Other Proposed Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Ferry Terminals', 'Toilets', 'Waterways', '2001 Population','2006 Population', '2013 Population', 'Turbidity Overlay'];
+var toggleableLayerIds = ['Te Matuku Marine Reserve', 'Proposed Marine Reserves', 'Marine Farms', 'Bus route', 'Bus stops', 'Ferry Terminals', 'Toilets', 'Waterways', '2001 Population','2006 Population', '2013 Population', 'Turbidity Overlay'];
 for (var i = 0; i < toggleableLayerIds.length; i++) {
     var id = toggleableLayerIds[i];
     var link = document.createElement('a');
@@ -426,7 +394,7 @@ for (var i = 0; i < toggleableLayerIds.length; i++) {
 //this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
 map.addControl(new mapboxgl.NavigationControl());
 map.on('click', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves', 'Ferry Terminals'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['Proposed Marine Reserves', 'Te Matuku Marine Reserve', 'Ferry Terminals'] });
 
     if (!features.length) {
         return;
@@ -455,7 +423,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML("2013 Population: <b>" + Math.round(feature.properties.Pop_13) +"</b>\nMeshblock ID: <b>" + feature.properties.MBID +"</b>")
+        .setHTML("<i>2013</i><br>Population: <b>" + feature.properties.Pop_13 +"</b><br>Meshblock ID: <b>" + feature.properties.MBID +"</b><br>Area: <b>" + ((feature.properties.Shape_Area)/1000000).toFixed(2) + " km<sup>2</sup></b>")
         .addTo(map);
 });
 
@@ -472,7 +440,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML("2006 Population: <b>" + Math.round(feature.properties.Pop_06) +"</b>\nMeshblock ID: <b>" + feature.properties.MBID +"</b>")
+        .setHTML("<i>2006</i><br>Population: <b>" + feature.properties.Pop_06 +"</b><br>Meshblock ID: <b>" + feature.properties.MBID +"</b><br>Area: <b>" + ((feature.properties.Shape_Area)/1000000).toFixed(2) + " km<sup>2</sup></b>")
         .addTo(map);
 });
 
@@ -489,7 +457,7 @@ map.on('click', function (e) {
     // based on the feature found.
     var popup = new mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
-        .setHTML("2001 Population: <b>" + Math.round(feature.properties.Pop_01) +"</b>\nMeshblock ID: <b>" + feature.properties.MBID +"</b>")
+        .setHTML("<i>2001</i><br>Population: <b>" + feature.properties.Pop_01 +"</b><br>Meshblock ID: <b>" + feature.properties.MBID +"</b><br>Area: <b>" + ((feature.properties.Shape_Area)/1000000).toFixed(2) + " km<sup>2</sup></b>")
         .addTo(map);
 });
 
@@ -497,7 +465,7 @@ map.on('click', function (e) {
 // Use the same approach as above to indicate that the symbols are clickable
 // by changing the cursor style to 'pointer'.
 map.on('mousemove', function (e) {
-    var features = map.queryRenderedFeatures(e.point, { layers: ['2001 Population', '2006 Population', '2013 Population', 'Proposed Marine Reserves (Dr Roger Grace)', 'Proposed Marine Reserves (Waiheke Local Board)', 'Te Matuku Marine Reserve', 'Other Proposed Reserves', 'Ferry Terminals'] });
+    var features = map.queryRenderedFeatures(e.point, { layers: ['2001 Population', '2006 Population', '2013 Population', 'Proposed Marine Reserves', 'Te Matuku Marine Reserve', 'Ferry Terminals'] });
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
 });
 </script>
