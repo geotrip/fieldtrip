@@ -56,6 +56,8 @@
 	var map = L.map('map', {
 		center: [7.12, 171.19],
 		zoom: 12,
+		maxZoom: 17,
+		minZoom: 12,
 		layers: [satellite, buildings2016, buildings2000, shoreline2016]
 	});
 
@@ -72,7 +74,7 @@
 	};
 
 	L.control.layers(baseLayers, overlays).addTo(map);
-	map._layersMaxZoom = 17; 
+	map._layersMaxZoom = 16; 
 </script>
 
 
