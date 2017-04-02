@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>260 Webmap</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+    .mapboxgl-popup {
+        max-width: 420px;
+        font: 12px/20px 'Open Sans', sans-serif;
+        z-index: 1
+    }
+    #info {
+        display: block;
+        position: relative;
+        margin: 0px auto;
+        width: 370px;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        font-size: 12px;
+        text-align: center;
+        color: #222;
+        background: #fff;
+        align-content: center;
+    }
+    .map-overlay {
+	    font: 12px/20px 'Open Sans', sans-serif;
+	    color: #404040;
+	    position: absolute;
+	    width: 220px;
+	    top: 210px;
+	    left: 0;
+	    padding: 10px;
+    }
+
+    .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow:0 1px 2px rgba(0, 0, 0, 0.20);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .map-overlay label {
+        display: block;
+        margin: 0 0 10px;
+    }
+
+    .map-overlay input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin: 0;
+        cursor: ew-resize;
+    }
+    .marker {
+        display: block;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 0;
+}
+    #menu {
+        
+        background-color: #595959;
+        color: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 1%;
+        left: 10px;
+        border-radius: 3px;
+        width: 220px;        
+        font-family: 'Open Sans', sans-serif;
+    }
+
+    #menu a {
+        font-size: 12px;
+        color: #fff;
+        display: block;
+        margin: 0;
+        padding: 0;
+        padding: 10px;
+        text-decoration: none;        
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+        
+    }
+    #menu a.active {
+        background-color: #fff;
+        color: #404040;        
+    }
+    .legend {
+    background-color: #fff;
+    border-radius: 3px;
+    bottom: 30px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    font: 12px/20px 'Open Sans', sans-serif;
+    padding: 10px;
+    position: absolute;       
+    right: 10px;
+    top:50%
+    z-index: 1;
+    width: 150px;
+    }
+    .legend h3 {
+    font: 20px/20px 'Open Sans', sans-serif;
+    margin: 0 0 10px;
+    }
+
+    .legend div p {
+    border-radius: 50%;
+    display: inline-table;
+    height: 10px;
+    margin-right: 5px;
+    width: 10px;
+    }
+    .legend div span {
+    border-radius: 50%;
+    display: inline-block;
+    height: 10px;
+    margin-right: 5px;
+    width: 10px;
+}
+    .att {
+    background-color: #fff;    
+    border-radius: 3px;
+    bottom: 0px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+    font: 10px/20px 'Open Sans', sans-serif;
+    padding: 1px;
+    position: absolute;       
+    left: 0px;
+    z-index: 1;
+    width: 430px;
+    }
+
+</style>
+<nav id="menu"></nav>
+<div id='map'></div>
+<pre id='info'></pre>
+<nav id='filter-group' class='filter-group'></nav>
+<div class='map-overlay top'>
+    <div class='map-overlay-inner'>
+        <label>Overlay opacity: <span id='slider-value'>100%</span></label>
+        <input id='slider' type='range' min='0' max='100' step='0' value='100' />
+    </div>
+</div>
+<div id='legend' class='legend'>
+    <h3>Legend</h3>
+    <img src=images/hillslope.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Hillslope<br>
+    <img src=images/fluvial.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Fluvial<br>
+    <img src=images/coastal.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Coastal<br>
+    <img src=images/photo.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Photo<br>
+    <img src=images/youtube.svg style="padding: 2px; width: 25px; height: 25px; vertical-align: middle;"> Youtube
+  </div>   
+  </div>
+<div id='attibution' class='att'>
+Hillslope icon by <a href=https://design.google.com/> Google </a> (modified) |
+    Coastal icon &copy; <a href=https://www.iconfinder.com/icons/1527307/ocean_sea_water_waves_icon#size=128> Alfredo Hernandez </a> (modified) <a href=https://creativecommons.org/licenses/by/3.0/legalcode>License</a>
+</div>
+
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYW5kcmV3ODQ1NTUiLCJhIjoiY2lydnp2Nzk3MGoza2ZnbTh1b2FoenFqYSJ9.iPSB6vUKQLifDYV570B8zg';
+var journals = {
+    "type": "FeatureCollection",
+    "features": [
+    {
+        "type": "Feature",
+        "properties": {
+            "description": "A placeholder for a journal article",
+            "info": "A. Author",
+            "link": "<a href=\"http://www.sciencedirect.com.ezproxy.auckland.ac.nz/science/article/pii/S0278434311001683\" target=\"_blank\">Link to article</a>",
+            "title": "Placeholder title",
+            "icon": "url(images/hillslope.svg)"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [176.120749,-38.593739]
+        }
+    }]
+      };  
+
+var filterGroup = document.getElementById('filter-group');
+var bounds = [
+    [177, -39.1917840], // Southwest coordinates
+    [179, -37.9815305]  // Northeast coordinates
+];
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/outdoors-v9',
+    center: [176.11, - 38.69],
+    zoom: 9,
+    minZoom: 9,
+    maxZoom: 16,
+    //maxBounds: bounds 
+    //20 is zoomed in, 0 is zoomed out
+});
+var slider = document.getElementById('slider');
+var sliderValue = document.getElementById('slider-value');
+
+
+
+map.on('load', function() {
+    // Add a GeoJSON source containing place coordinates and information.
+    map.addSource("journals", {
+        "type": "geojson",
+        "data": journals
+    });
+    map.addSource('DigitalGlobe Satellite Imagery', {
+        type: 'raster',
+        url: 'mapbox://mapbox.satellite',
+        tileSize: 512
+    });
+    map.addLayer({
+        'id': 'DigitalGlobe Satellite Imagery',
+        'type': 'raster',
+        'source': 'DigitalGlobe Satellite Imagery',
+        'source-layer': 'DigitalGlobe Satellite Imagery',
+
+    });
+    map.setLayerZoomRange('DigitalGlobe Satellite Imagery', 13, 20);    
+    slider.addEventListener('input', function(e) {
+        // Adjust the layers opacity. layer here is arbitrary - this could
+        // be another layer name found in your style or a custom layer
+        // added on the fly using `addSource`.
+    map.setPaintProperty('Tarndale LIDAR', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    map.setPaintProperty('Coastal LIDAR', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    map.setPaintProperty('Terrace Diagram', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+    map.setPaintProperty('Lower Waipaoa Historical Imagery', 'raster-opacity', parseInt(e.target.value, 10) / 100);      
+
+        // Value indicator
+        sliderValue.textContent = e.target.value + '%';
+    });
+
+
+
+
+    
+
+// add markers to map
+journals.features.forEach(function(marker) {
+    //add popups to each marker instance, otherwise you only get one popup
+    var popup = new mapboxgl.Popup({offset:[0, -30]})
+    //organise what is shown in the popup
+    .setHTML('<h2 ALIGN=center>' + marker.properties.title + '</h2><P ALIGN=center><i>' + marker.properties.info + '<br></i>'+ marker.properties.link + '</p><p>'+ marker.properties.description + '</p>');
+    // create a DOM element for the marker
+    var el = document.createElement('div');
+    el.className = 'marker';
+    el.style.backgroundImage = marker.properties.icon;
+    //the pdf icon comes from freeiconshop.com, need to attribute
+    //set how big the marker icons appear, independent of scale
+    el.style.width = 40 + 'px';
+    el.style.height = 40 + 'px';
+    //add markers to map, with an offset half that of the width and height to position correctly    
+    new mapboxgl.Marker(el, {offset: [-20, -20]})
+        .setLngLat(marker.geometry.coordinates)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+
+});
+
+
+// Use the same approach as above to indicate that the symbols are clickable
+// by changing the cursor style to 'pointer'.
+map.on('mousemove', function (e) {
+    document.getElementById('info').innerHTML =
+            // e.lngLat is the longitude, latitude geographical position of the event
+    JSON.stringify(e.lngLat);
+    var features = map.queryRenderedFeatures(e.point, { layers: ['poi-fluvial', 'poi-coastal', 'poi-hillslope', 'poi-photo', 'poi-youtube'] });
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+});
+
+var toggleableLayerIds = ['DigitalGlobe Satellite Imagery'];
+
+for (var i = 0; i < toggleableLayerIds.length; i++) {
+    var id = toggleableLayerIds[i];
+
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = id;
+
+    link.onclick = function (e) {
+        var clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
+
+        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+        if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.className = '';
+        } else {
+            this.className = 'active';
+            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        }
+    };
+
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+
+
+//this adds a zoom in and out control, very simple and useful for people who do not have other means to control zoom level. 
+map.addControl(new mapboxgl.NavigationControl());
+</script>
+
+</body>
+</html>
