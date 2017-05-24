@@ -92,17 +92,20 @@
 		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
 	//Mutually exclusive base layers (only one on at a time)	
-	var grayscale  = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr});
+	var grayscaleLight  = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr});
+	var grayscaleDark  = L.tileLayer(mbUrl, {id: 'mapbox.dark', attribution: mbAttr});
 	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'+' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>', opacity: 0.7});
 //I have set a custom opacity here to make the line features more easily visible
+
+var lineWeight = 1.5;
 
 	var map = L.map('map', {
 		center: [7.12, 171.19],
 		zoom: 12,
 		maxZoom: 17,
 		minZoom: 12,
-		layers: [grayscale]
+		layers: [grayscaleLight]
 	});
 
 	// This is the info window thing. Didn't work very well, and only persisted when the cursor was held exactly over the line - which is tricky in this case. Best used for polygons instead.
@@ -129,11 +132,11 @@
 function getColorAs(d) {
     return d == "O" ? '#de2d26':
 			d == "L" ? '#08519c':
-                      '#898989';
+                      '#383838';
 }
 function styleAs(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorAs(feature.properties.Aspect)
     };
 }
@@ -143,28 +146,28 @@ function getColorEn(d) {
     return d == "Engineered" ? '#de2d26':
 			d == "Unarmoured" ? '#08519c':
 			d == "Obscured" ? '#53f442':
-                      '#898989';
+                      '#383838';
 }
 function styleEn(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorEn(feature.properties.Engineered)
     };
 }
 
 //Material
 function getColorMat(d) {
-    return 	d == "Concrete" ? '#08519c':
-			d == "Unarmoured" ? '#ff8f00':
-			d == "Reef Material" ? '#f442eb':
-			d == "Cinder Blocks" ? '#53f442':
-    		d == "Debris" ? '#de2d26':						
-			d == "Mixed" ? '#ddd230':
-                      '#898989';
+    return 	d == "Concrete" ? '#de2d26':
+			d == "Unarmoured" ? '#08519c':
+			d == "Reef Material" ? '#53f442':
+			d == "Cinder Blocks" ? '#f442eb':
+    		d == "Debris" ? '#ff8f00':						
+			d == "Mixed" ? '#fcef00':
+                      '#383838';
 }
 function styleMat(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorMat(feature.properties.Material)
     };
 }
@@ -175,11 +178,11 @@ function getColorCon(d) {
 			d == "OK" ? '#08519c':
 			d == "Poor" ? '#de2d26':
 			d == "Beach" ? '#f442eb':
-                      '#898989';
+                      '#383838';
 }
 function styleCon(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorCon(feature.properties.Condition)
     };
 }
@@ -188,15 +191,15 @@ function styleCon(feature) {
 function getColorStru(d) {
     return d == "Vertical wall" ? '#de2d26':
 			d == "Revetment/Riprap" ? '#08519c':			
-			d == "Beach" ? '#f442eb':
-			d == "Boat Ramp" ? '#ddd230':
-			d == "Piled Debris" ? '#53f442':
-			d == "Dock" ? '#ff8f00':
-                      '#898989';
+			d == "Beach" ? '#53f442':
+			d == "Boat Ramp" ? '#f442eb':
+			d == "Piled Debris" ? '#ff8f00':
+			d == "Dock" ? '#fcef00':
+                      '#383838';
 }
 function styleStru(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorStru(feature.properties.Structure)
     };
 }
@@ -210,11 +213,11 @@ function getColorCWZ(d) {
 			d == 5 ? '#fc4e2a':
 			d == 6 ? '#e31a1c':
 			d == 7 ? '#b10026':
-                      '#898989';
+                      '#383838';
 }
 function styleCWZ(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorCWZ(feature.properties.CWZ)
     };
 }
@@ -223,11 +226,11 @@ function styleCWZ(feature) {
 function getColorRec(d) {
     return d == "0" ? '#de2d26':
 			d == "1" ? '#08519c':
-                      '#898989';
+                      '#383838';
 }
 function styleRec(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorRec(feature.properties.Reclaimed)
     };
 }
@@ -236,11 +239,11 @@ function styleRec(feature) {
 function getColorPas(d) {
     return d == "0" ? '#de2d26':
 			d == "1" ? '#08519c':
-                      '#898989';
+                      '#383838';
 }
 function stylePas(feature) {
     return {
-        weight: 1,
+        weight: lineWeight,
         color: getColorRec(feature.properties.Passage)
     };
 }
@@ -248,7 +251,7 @@ function stylePas(feature) {
 // function getColorLen(d) {
 //     return d > 1000 ? '#de2d26':
 // 			d < 999 ? '#08519c':
-//                       '#898989';
+//                       '#383838';
 // }
 // function styleLen(feature) {
 //     return {
@@ -262,49 +265,49 @@ function onEachFeature(feature, layer) {
 	mouseover: highlightFeature,
     mouseout: resetHighlight
 });
-    var popupContent = "";
+    var popupContent = "<h3>Relevant Attributes</h3>";
 	if (feature.properties.Engineered) {
-			popupContent += ("Engineered: " + feature.properties.Engineered);
+			popupContent += ("<i>Engineered: </i>" + feature.properties.Engineered);
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Structure) {
-			popupContent += ("<br>Structure: " + feature.properties.Structure);
+			popupContent += ("<br><i>Structure: </i>" + feature.properties.Structure);
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Material) {
-			popupContent += ("<br>Material: " + feature.properties.Material);
+			popupContent += ("<br><i>Material: </i>" + feature.properties.Material);
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Condition) {
-			popupContent += ("<br>Condition: " + feature.properties.Condition);
+			popupContent += ("<br><i>Condition: </i>" + feature.properties.Condition);
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Structure) {
-			popupContent += ("<br>Structure: " + feature.properties.Structure);
+			popupContent += ("<br><i>Structure: </i>" + feature.properties.Structure);
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.CWZ) {
-			popupContent += ("<br>Coastal Wave Zone: " + feature.properties.CWZ);
+			popupContent += ("<br><i>Coastal Wave Zone: </i>" + feature.properties.CWZ);
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Reclaimed == 0) {
-			popupContent += ("<br>Reclaimed: False");
+			popupContent += ("<br><i>Reclaimed: </i>False");
 			layer.bindPopup(popupContent);
 		}
 	if (feature.properties.Reclaimed == 1) {
-			popupContent += ("<br>Reclaimed: True");
+			popupContent += ("<br><i>Reclaimed: </i>True");
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Passage == 1) {
-			popupContent += ("<br>Passage: True");
+			popupContent += ("<br><i>Passage: </i>True");
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Passage == 0) {
-			popupContent += ("<br>Passage: False");
+			popupContent += ("<br><i>Passage: </i>False");
 			layer.bindPopup(popupContent); 
 		}
 	if (feature.properties.Notes) {
-			popupContent += ("<br>Notes: " + feature.properties.Notes);
+			popupContent += ("<br><i>Notes: </i>" + feature.properties.Notes);
 			layer.bindPopup(popupContent); 
 		}	
 
@@ -321,11 +324,12 @@ function onEachFeature(feature, layer) {
 	var shorelineRec = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleRec});
 	var shorelinePas = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: stylePas});
 	//var shorelineLen = L.geoJSON(shoreline_data, {style: styleLen});
-	var shorelineNo = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, color: 'red', weight: 1}).addTo(map);
+	var shorelineNo = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, color: 'red', weight: lineWeight}).addTo(map);
 
 	var basemaps = {
 		"ESRI Satellite": Esri_WorldImagery,		
-    	"Grayscale": grayscale
+    	"Mapbox Light": grayscaleLight,
+    	"Mapbox Dark": grayscaleDark
 	};
 
 // Adding the layers to the control
@@ -366,7 +370,7 @@ function resetHighlight(e) {
     var layer = e.target;
 
     layer.setStyle({
-        weight: 1
+        weight: lineWeight
     });
     info.update();
 }
@@ -389,8 +393,8 @@ var aspectLegend = L.control({position: 'bottomright'});
 
 	aspectLegend.onAdd = function (map) {
 	var div = L.DomUtil.create('div', 'info legend'),
-			grades = ["O", "L"],
-			key_labels = ["Oceanward", "Lagoonward"],
+			grades = ["L","O"],
+			key_labels = ["Lagoonward", "Oceanward"],
 			labels = ["<b>Shoreline Aspect</b><br>"],
 			from;
 			
