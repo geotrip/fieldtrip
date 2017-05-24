@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Majuro Shoreline Classification</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+        }
+
+		.leaflet-control-layers{
+			font: 14px/16px Arial, Helvetica, sans-serif;
+		}
+/*
+		.leaflet-control-layers-toggle{
+		    width:auto;
+		    font: 14px/16px Arial, Helvetica, sans-serif;
+		    background-position:3px 50%;
+		    padding:3px;
+		    padding-left:36px;
+		    text-decoration:none;
+		    line-height:36px;
+		}*/
+	/*		.leaflet-control-layers-toggle:after{
+	    	content:"Shoreline Symbology and Optional Layers";
+	    	color:#000;
+		}*/
+		.info {
+		    padding: 6px 8px;
+		    font: 14px/16px Arial, Helvetica, sans-serif;
+		    background: white;
+		    background: rgba(255,255,255,0.8);
+		    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+		    border-radius: 5px;
+		}
+		.info h4 {
+		    margin: 0 0 5px;
+		}
+				.legend {
+		    line-height: 18px;
+		    width: 150px;
+
+		}
+		.legend i {
+		    width: 18px;
+		    height: 18px;
+		    float: left;
+		    margin-right: 8px;
+		    opacity: 0.7;
+		}
+		.leaflet-control-layers-group-name {
+		  font-weight: bold;
+		  margin-bottom: .2em;
+		  margin-left: 3px;
+		}
+
+		.leaflet-control-layers-group {
+		  margin-bottom: .5em;
+		}
+
+		.leaflet-control-layers-scrollbar {
+		  overflow-y: scroll;
+		  padding-right: 10px;
+		}
+</style>
+</head>
+<body>
+<div id='map' style="width: 100%; height: 100%;"></div>
+<script src="shoreline_class.js" type="text/javascript"></script>
+<script src="leaflet.groupedlayercontrol.js"></script>
+<script>
+//Set up attributions and links for the tilelayers (basemaps). Two are from Mapbox and use an ID, with a more up to date satelltie cover using the ESRI basemap. 
+//The leaflet provider demo (https://leaflet-extras.github.io/leaflet-providers/preview/) is a good source for basemaps.
+
+	var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>' + ' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>',
+		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+	//Mutually exclusive base layers (only one on at a time)	
+	var grayscale  = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr});
+	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'+' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>', opacity: 0.7});
+//I have set a custom opacity here to make the line features more easily visible
+
+	var map = L.map('map', {
+		center: [7.12, 171.19],
+		zoom: 12,
+		maxZoom: 17,
+		minZoom: 12,
+		layers: [grayscale]
+	});
+
+	// This is the info window thing. Didn't work very well, and only persisted when the cursor was held exactly over the line - which is tricky in this case. Best used for polygons instead.
+
+	// control that shows state info on hover
+	// var info = L.control();
+
+	// info.onAdd = function (map) {
+	// 	this._div = L.DomUtil.create('div', 'info');
+	// 	this.update();
+	// 	return this._div;
+	// };
+
+	// info.update = function (props) {
+	// 	this._div.innerHTML = (props.Notes);
+	// };
+
+	// info.addTo(map);
+
+//		get color and style methods. Unique to each field, reads the value from the geojson data. For now stuff which isn't listed is #8c8c8c, will sort when data is cleaned up and the list of possible values for each property is locked down.
+
+
+//Aspect
+function getColorAs(d) {
+    return d == "O" ? '#de2d26':
+			d == "L" ? '#08519c':
+                      '#898989';
+}
+function styleAs(feature) {
+    return {
+        weight: 1,
+        color: getColorAs(feature.properties.Aspect)
+    };
+}
+
+//Engineered
+function getColorEn(d) {
+    return d == "Engineered" ? '#de2d26':
+			d == "Unarmoured" ? '#08519c':
+			d == "Obscured" ? '#53f442':
+                      '#898989';
+}
+function styleEn(feature) {
+    return {
+        weight: 1,
+        color: getColorEn(feature.properties.Engineered)
+    };
+}
+
+//Material
+function getColorMat(d) {
+    return 	d == "Concrete" ? '#08519c':
+			d == "Unarmoured" ? '#ff8f00':
+			d == "Reef Material" ? '#f442eb':
+			d == "Cinder Blocks" ? '#53f442':
+    		d == "Debris" ? '#de2d26':						
+			d == "Mixed" ? '#ddd230':
+                      '#898989';
+}
+function styleMat(feature) {
+    return {
+        weight: 1,
+        color: getColorMat(feature.properties.Material)
+    };
+}
+
+//Condition
+function getColorCon(d) {
+    return d == "Good" ? '#53f442':
+			d == "OK" ? '#08519c':
+			d == "Poor" ? '#de2d26':
+			d == "Beach" ? '#f442eb':
+                      '#898989';
+}
+function styleCon(feature) {
+    return {
+        weight: 1,
+        color: getColorCon(feature.properties.Condition)
+    };
+}
+
+//Structure
+function getColorStru(d) {
+    return d == "Vertical wall" ? '#de2d26':
+			d == "Revetment/Riprap" ? '#08519c':			
+			d == "Beach" ? '#f442eb':
+			d == "Boat Ramp" ? '#ddd230':
+			d == "Piled Debris" ? '#53f442':
+			d == "Dock" ? '#ff8f00':
+                      '#898989';
+}
+function styleStru(feature) {
+    return {
+        weight: 1,
+        color: getColorStru(feature.properties.Structure)
+    };
+}
+
+//CWZ
+function getColorCWZ(d) {
+    return d == 0 ? '#ffffb2':
+			d == 2 ? '#fed976':
+			d == 3 ? '#feb24c':
+			d == 4 ? '#fd8d3c':
+			d == 5 ? '#fc4e2a':
+			d == 6 ? '#e31a1c':
+			d == 7 ? '#b10026':
+                      '#898989';
+}
+function styleCWZ(feature) {
+    return {
+        weight: 1,
+        color: getColorCWZ(feature.properties.CWZ)
+    };
+}
+
+//Reclaimed
+function getColorRec(d) {
+    return d == "0" ? '#de2d26':
+			d == "1" ? '#08519c':
+                      '#898989';
+}
+function styleRec(feature) {
+    return {
+        weight: 1,
+        color: getColorRec(feature.properties.Reclaimed)
+    };
+}
+
+//Reclaimed
+function getColorPas(d) {
+    return d == "0" ? '#de2d26':
+			d == "1" ? '#08519c':
+                      '#898989';
+}
+function stylePas(feature) {
+    return {
+        weight: 1,
+        color: getColorRec(feature.properties.Passage)
+    };
+}
+//Length
+// function getColorLen(d) {
+//     return d > 1000 ? '#de2d26':
+// 			d < 999 ? '#08519c':
+//                       '#898989';
+// }
+// function styleLen(feature) {
+//     return {
+//         weight: 1,
+//         color: getColorLen(feature.properties.Length)
+//     };
+// }
+
+function onEachFeature(feature, layer) {
+	layer.on({
+	mouseover: highlightFeature,
+    mouseout: resetHighlight
+});
+    var popupContent = "";
+	if (feature.properties.Engineered) {
+			popupContent += ("Engineered: " + feature.properties.Engineered);
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Structure) {
+			popupContent += ("<br>Structure: " + feature.properties.Structure);
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Material) {
+			popupContent += ("<br>Material: " + feature.properties.Material);
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Condition) {
+			popupContent += ("<br>Condition: " + feature.properties.Condition);
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Structure) {
+			popupContent += ("<br>Structure: " + feature.properties.Structure);
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.CWZ) {
+			popupContent += ("<br>Coastal Wave Zone: " + feature.properties.CWZ);
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Reclaimed == 0) {
+			popupContent += ("<br>Reclaimed: False");
+			layer.bindPopup(popupContent);
+		}
+	if (feature.properties.Reclaimed == 1) {
+			popupContent += ("<br>Reclaimed: True");
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Passage == 1) {
+			popupContent += ("<br>Passage: True");
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Passage == 0) {
+			popupContent += ("<br>Passage: False");
+			layer.bindPopup(popupContent); 
+		}
+	if (feature.properties.Notes) {
+			popupContent += ("<br>Notes: " + feature.properties.Notes);
+			layer.bindPopup(popupContent); 
+		}	
+
+};
+
+// Adding the layers to the map, and styling by function
+
+	var shorelineAs = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleAs});
+	var shorelineEn = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleEn});
+	var shorelineMat = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleMat});
+	var shorelineCon = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleCon});
+	var shorelineStru = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleStru});
+	var shorelineCWZ = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleCWZ});
+	var shorelineRec = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: styleRec});
+	var shorelinePas = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, style: stylePas});
+	//var shorelineLen = L.geoJSON(shoreline_data, {style: styleLen});
+	var shorelineNo = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, color: 'red', weight: 1}).addTo(map);
+
+	var basemaps = {
+		"ESRI Satellite": Esri_WorldImagery,		
+    	"Grayscale": grayscale
+	};
+
+// Adding the layers to the control
+
+	var topLayers = {
+	"Shoreline Symbology": {
+		"Basic": shorelineNo,		
+		"Aspect": shorelineAs,
+		"Engineering": shorelineEn,
+		"Material": shorelineMat,
+		"Condition": shorelineCon,
+		"Structure": shorelineStru,
+		"Coastal Wave Zone": shorelineCWZ,
+		"Reclaimed": shorelineRec,
+		"Passage": shorelinePas
+		//"Length": shorelineLen
+		}
+	};
+
+
+//Hacky way of setting and reseting highlight: just change the line width and leave the colour alone, otherwise you cannot reset by layer
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+    info.update(layer.feature.properties);
+}
+
+
+function resetHighlight(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 1
+    });
+    info.update();
+}
+var options = {
+  // Make the "Landmarks" group exclusive (use radio inputs)
+  exclusiveGroups: ["Shoreline Symbology"],
+  // Show a checkbox next to non-exclusive group labels for toggling all
+  groupCheckboxes: true
+};
+
+//add the layer groups to the map control using the new groupedlayers command added by the external code
+L.control.groupedLayers(basemaps, topLayers, options).addTo(map);
+
+
+
+
+//Legends
+
+var aspectLegend = L.control({position: 'bottomright'});
+
+	aspectLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = ["O", "L"],
+			key_labels = ["Oceanward", "Lagoonward"],
+			labels = ["<b>Shoreline Aspect</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];		
+		labels.push(
+		'<i style = "background:' + getColorAs(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+
+var engLegend = L.control({position: 'bottomright'});
+
+	engLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = ["Engineered", "Unarmoured", "Obscured", "Other"],
+			key_labels = ["Engineered", "Unarmoured", "Obscured", "Other"],
+			labels = ["<b>Engineering Status</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorEn(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+var matLegend = L.control({position: 'bottomright'});
+
+	matLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = ["Concrete", "Unarmoured","Reef Material","Cinder Blocks","Debris","Mixed", "Other"],
+			key_labels = ["Concrete", "Unarmoured","Reef Material","Cinder Blocks","Debris","Mixed", "Other"],
+			labels = ["<b>Material</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorMat(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+
+var conLegend = L.control({position: 'bottomright'});
+
+	conLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = ["Good", "OK", "Poor", "Beach", "Other"],
+			key_labels = ["Good", "OK", "Poor", "Beach", "Other"],
+			labels = ["<b>Condition</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorCon(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+var struLegend = L.control({position: 'bottomright'});
+
+	struLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = ["Vertical wall", "Revetment/Riprap", "Beach", "Boat Ramp", "Piled Debris", "Dock", "Other"],
+			key_labels = ["Vertical wall", "Revetment/Riprap", "Beach", "Boat Ramp", "Piled Debris", "Dock", "Other"],
+			labels = ["<b>Structure</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorStru(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+var CWZLegend = L.control({position: 'bottomright'});
+
+	CWZLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = [0, 2, 3, 4, 5, 6, 7],
+			key_labels = [0, 2, 3, 4, 5, 6, 7],
+			labels = ["<b>Coastal Wave Zone</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorCWZ(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+var RecLegend = L.control({position: 'bottomright'});
+
+	RecLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = [1, 0],
+			key_labels = ["True", "False"],
+			labels = ["<b>Reclaimed</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorRec(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+var PassLegend = L.control({position: 'bottomright'});
+
+	PassLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = [1, 0],
+			key_labels = ["True", "False"],
+			labels = ["<b>Passage</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];	
+		labels.push(
+		'<i style = "background:' + getColorPas(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+
+
+
+
+
+
+
+
+
+// Add and remove legend from layers
+
+
+
+map.on('overlayadd', function (eventLayer) {
+   if (eventLayer.name === "Aspect") {
+       aspectLegend.addTo(map);
+   		}
+	else if (eventLayer.name === "Engineering") {
+		engLegend.addTo(map);
+		}
+	else if (eventLayer.name === "Material") {
+		matLegend.addTo(map);
+		}
+	else if (eventLayer.name === "Condition") {
+		conLegend.addTo(map);
+		}
+	else if (eventLayer.name === "Structure") {
+		struLegend.addTo(map);
+		}
+	else if (eventLayer.name === "Coastal Wave Zone") {
+		CWZLegend.addTo(map);
+		}
+	else if (eventLayer.name === "Reclaimed") {
+		RecLegend.addTo(map);
+		}
+	else if (eventLayer.name === "Passage") {
+		PassLegend.addTo(map);
+		}			
+  });
+  
+map.on('overlayremove', function (eventLayer) {
+	if (eventLayer.name === "Aspect") {
+		this.removeControl(aspectLegend);
+	}
+	else if (eventLayer.name === "Engineering") {
+		this.removeControl(engLegend);
+		}
+	else if (eventLayer.name === "Material") {
+		this.removeControl(matLegend);
+		}
+	else if (eventLayer.name === "Condition") {
+		this.removeControl(conLegend);
+		}
+	else if (eventLayer.name === "Structure") {
+		this.removeControl(struLegend);
+		}
+	else if (eventLayer.name === "Coastal Wave Zone") {
+		this.removeControl(CWZLegend);
+		}
+	else if (eventLayer.name === "Reclaimed") {
+		this.removeControl(RecLegend);
+		}
+	else if (eventLayer.name === "Passage") {
+		this.removeControl(PassLegend);
+		}
+  });
+
+
+
+</script>
+</body>
+</html>
