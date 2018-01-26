@@ -145,7 +145,7 @@ function getColor(d) {
 			d < 140 ? '#CED500':
 			d < 160 ? '#D99F00':
 			d < 180 ? '#DD6000':
-			d < 200 ? '#E11E00':
+			d <= 200 ? '#E11E00':
                       '#E50025';
 
 }
@@ -289,7 +289,7 @@ var turbidity = L.imageOverlay(imageUrl, imageBounds)
 	var map = L.map('map', {
     	center: [-36.80, 175.1],
     	zoom: 11.5,
-	minZoom: 11.15,
+	minZoom: 11.5,
 	layers: [OpenMapSurfer_Grayscale, mbcl, mf, mr, makutuR]
 	});
 
@@ -312,14 +312,14 @@ var turbidity = L.imageOverlay(imageUrl, imageBounds)
 	"Other stuff":
 	{
 		"Toilets <img src=wc.svg height=14 width=14 >": toilet,
-		"Ferry Terminals <img src=ferry.svg height=14 width=14 >": ferry,
-		"Bus Stops <img src=front-bus.svg height=14 width=14 >": stops,
-		"Bus Routes": busRoutes,
-		"Marine Farms": mf,
-		"Proposed Marine Reserves": mr,
-		"Te Makutu  Marine Reserve": makutuR,
-		"Turbidity Overlay": turbidity,
-		"Waterways": waterways
+		"Ferry Terminals <img src=ferry.svg height=14 width=14>": ferry,
+		"Bus Stops <img src=front-bus.svg height=14 width=14>": stops,
+		"Bus Routes <img src=busRoute.png height=14 width=14>": busRoutes,
+		"Marine Farms <img src=red.png height=14 width=14>": mf,
+		"Proposed Marine Reserves <img src=blue.png height=14 width=14>": mr,
+		"Te Makutu  Marine Reserve <img src=green.png height=14 width=14>": makutuR,
+		"Waterways <img src=wat.png height=14 width=14>": waterways,
+		"Turbidity Overlay <img src=tur.png height=14 width=14>": turbidity		
 	}
 	};
 
@@ -360,7 +360,7 @@ var mbLegend = L.control({position: 'bottomright'});
 	mbLegend.onAdd = function (map) {
 	var div = L.DomUtil.create('div', 'info legend'),
 			grades = [20,80,120,160,199,261],
-			key_labels = ['<20','<80','<120','<160','<200','more than 200'],
+			key_labels = ['< 20','< 80','< 120','< 160','<= 200','> 200'],
 			labels = ["<b>Meshblock Population</b><br>"],
 			from;
 			
