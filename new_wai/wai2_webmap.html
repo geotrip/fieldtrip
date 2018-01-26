@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Waiheke Leaflet Map</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        html, body, #map {
+            height: 100%;
+            width: 100%;
+        }
+
+		.leaflet-control-layers{
+			font: 14px/16px Arial, Helvetica, sans-serif;
+		}
+/*
+		.leaflet-control-layers-toggle{
+		    width:auto;
+		    font: 14px/16px Arial, Helvetica, sans-serif;
+		    background-position:3px 50%;
+		    padding:3px;
+		    padding-left:36px;
+		    text-decoration:none;
+		    line-height:36px;
+		}*/
+	/*		.leaflet-control-layers-toggle:after{
+	    	content:"Shoreline Symbology and Optional Layers";
+	    	color:#000;
+		}*/
+		.info {
+		    padding: 6px 8px;
+		    font: 14px/16px Arial, Helvetica, sans-serif;
+		    background: white;
+		    background: rgba(255,255,255,0.8);
+		    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+		    border-radius: 5px;
+		}
+		.info h4 {
+		    margin: 0 0 5px;
+		}
+				.legend {
+		    line-height: 18px;
+		    width: 150px;
+
+		}
+		.legend i {
+		    width: 18px;
+		    height: 18px;
+		    float: left;
+		    margin-right: 8px;
+		    opacity: 0.7;
+		}
+		.leaflet-control-layers-group-name {
+		  font-weight: bold;
+		  margin-bottom: .2em;
+		  margin-left: 3px;
+		}
+
+		.leaflet-control-layers-group {
+		  margin-bottom: .5em;
+		}
+
+		.leaflet-control-layers-scrollbar {
+		  overflow-y: scroll;
+		  padding-right: 10px;
+		}
+</style>
+</head>
+<body>
+<div id='map' style="width: 100%; height: 100%;"></div>
+<!-- <div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> -->
+<script src="MB.js" type="text/javascript"></script>
+<script src="riv.js" type="text/javascript"></script>
+<script src="MR.js" type="text/javascript"></script>
+<script src="matuku.js" type="text/javascript"></script>
+<script src="marine_farm.js" type="text/javascript"></script>
+<script src="toil.js" type="text/javascript"></script>
+<script src="bus.js" type="text/javascript"></script>
+<script src="ferry.js" type="text/javascript"></script>
+<script src="leaflet.groupedlayercontrol.js"></script>
+<script>
+//Set up attributions and links for the tilelayers (basemaps). Two are from Mapbox and use an ID, with a more up to date satelltie cover using the ESRI basemap. 
+//The leaflet provider demo (https://leaflet-extras.github.io/leaflet-providers/preview/) is a good source for basemaps.
+
+	var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="http://mapbox.com">Mapbox</a>' + ' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>',
+		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+	//Mutually exclusive base layers (only one on at a time)
+	var grayscaleDark  = L.tileLayer(mbUrl, {id: 'mapbox.dark', attribution: mbAttr});
+	var OpenMapSurfer_Grayscale = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roadsg/x={x}&y={y}&z={z}', {
+	maxZoom: 19,
+	attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	});
+	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
+//I have set a custom opacity here to make the line features more easily visible
+var lineWeight = 1.5;
+var fillOpacity = 0.6;
+
+
+
+var toiletIcon = L.icon({
+		iconUrl: 'wc.svg',
+		iconSize: [14, 14],
+		iconAnchor: [14, 14],
+		popupAnchor: [0, -7]
+});
+
+
+var busIcon = L.icon({
+		iconUrl: 'front-bus.svg',
+		iconSize: [14, 14],
+		iconAnchor: [14, 14],
+		popupAnchor: [0, -7]
+});
+
+var ferryIcon = L.icon({
+		iconUrl: 'ferry.svg',
+		iconSize: [14, 14],
+		iconAnchor: [14, 14],
+		popupAnchor: [0, -7]
+});
+
+function getColor(d) {
+    return d < 20 ? '#00BF9F':
+			d < 40 ? '#00C267':
+			d < 60 ? '#00C267':
+			d < 80 ? '#00C267':
+			d < 100 ? '#4BCE00':
+			d < 120 ? '#8CD200':
+			d < 140 ? '#CED500':
+			d < 160 ? '#D99F00':
+			d < 180 ? '#DD6000':
+			d < 200 ? '#E11E00':
+                      '#E50025';
+
+}
+function styleMb13(feature) {
+    return {
+    	weight: lineWeight,
+    	fillOpacity: fillOpacity,
+        color: getColor(feature.properties.Pop_13)
+    };
+}
+
+function styleMb06(feature) {
+    return {
+    	weight: lineWeight,
+    	fillOpacity: fillOpacity,
+        color: getColor(feature.properties.Pop_06)
+    };
+}
+
+function styleMb01(feature) {
+    return {
+    	weight: lineWeight,
+    	fillOpacity: fillOpacity,
+        color: getColor(feature.properties.Pop_01)
+    };
+}
+
+function stylecl(feature) {
+    return {
+    	weight: lineWeight,
+    	fillOpacity: 0,
+    	opacity: 0.2
+    };
+}
+
+
+	function onEachFeature(feature, layer) {
+
+			layer.on({
+			mouseover: highlightFeature,
+		    mouseout: resetHighlight
+		});
+
+		var popupContent = 
+		"</b>Area: <b>" + ((feature.properties.Shape_Area)/1000000).toFixed(2) + " km<sup>2</sup></b>" +
+		"</b><br>Meshblock ID: <b>" + feature.properties.MBID +
+		"</b><br>2013 Population: <b>" + feature.properties.Pop_13 +
+		"</b><br>2006 Population: <b>" + feature.properties.Pop_06 +
+		"</b><br>2001 Population: <b>" + feature.properties.Pop_01;
+		
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+
+	function onEachFeatureStops(feature, layer) {
+		var popupContent = 
+		"Stop Name: <b>" + feature.properties.stop_name;
+		
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	function onEachFeatureFerry(feature, layer) {
+		var popupContent = 
+		feature.properties.name;
+		
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+	function onEachFeatureMR(feature, layer) {
+		var popupContent = feature.properties.name;
+		
+
+		if (feature.properties && feature.properties.popupContent) {
+			popupContent += feature.properties.popupContent;
+		}
+
+		layer.bindPopup(popupContent);
+	}
+
+
+
+
+
+var busRoutes = L.geoJSON(busroute);
+var waterways = L.geoJSON(rivers,{color: 'grey', dashArray: "5 5", weight: 1});
+var mbcl = L.geoJSON(mb, {onEachFeature: onEachFeature, style: stylecl});
+var mb13 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb13});
+var mb06 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb06});
+var mb01 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb01});
+var mf = L.geoJSON(marineFarm, {color: 'red', fillOpacity: fillOpacity, lineWeight: lineWeight});
+var mr = L.geoJSON(propMarine, {fillOpacity: fillOpacity, lineWeight: lineWeight, onEachFeature: onEachFeatureMR});
+var makutuR = L.geoJSON(makutu, {color: 'yellow', fillOpacity: fillOpacity, lineWeight: lineWeight, onEachFeature: onEachFeatureMR});
+var stops = L.geoJSON(busstop,{
+
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: busIcon});
+		},
+		onEachFeature: onEachFeatureStops
+	});
+
+var ferry = L.geoJSON(ferryPoints,{
+
+		pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: ferryIcon});
+		},
+		onEachFeature: onEachFeatureFerry
+	});
+
+var toilet = L.geoJSON(toilets,{
+			pointToLayer: function (feature, latlng) {
+			return L.marker(latlng, {icon: toiletIcon});
+		},
+	});
+
+
+var imageUrl = 'turb.png',
+    imageBounds =[
+                [-36.6761008308, 174.9026590331,],
+                [-36.6761008308, 175.2885053471],
+                [-36.9550926588, 175.2885053471],
+                [-36.9550926588, 174.9026590331]
+            ];
+
+var turbidity = L.imageOverlay(imageUrl, imageBounds)
+
+	var map = L.map('map', {
+    center: [-36.80, 175.1],
+    zoom: 11.5,
+	layers: [OpenMapSurfer_Grayscale, mbcl, mf, mr, makutuR]
+	});
+
+	//This adds attributions which are not tied to a specific basemap
+	map.attributionControl.addAttribution('Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a> | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>');
+
+	var basemaps = {
+		"ESRI Satellite": Esri_WorldImagery,	
+    	"Mapbox Dark": grayscaleDark,
+    	"Greyscale Light": OpenMapSurfer_Grayscale
+	};
+
+	var topLayers = {	
+	"Meshblock Population Symbology Year": {
+		"Clear": mbcl,
+		"2013": mb13,
+		"2006": mb06,
+		"2001": mb01		
+		},
+	"Other stuff":
+	{
+		"Toilets <img src=wc.svg height=14 width=14 >": toilet,
+		"Ferry Terminals <img src=ferry.svg height=14 width=14 >": ferry,
+		"Bus Stops <img src=front-bus.svg height=14 width=14 >": stops,
+		"Bus Routes": busRoutes,
+		"Marine Farms": mf,
+		"Proposed Marine Reserves": mr,
+		"Te Makutu  Marine Reserve": makutuR,
+		"Turbidity Overlay": turbidity,
+		"Waterways": waterways
+	}
+	};
+
+
+var options = {
+  //Make the meshblock display group exclusive (use radio inputs)
+  exclusiveGroups: ["Meshblock Population Symbology Year"],
+  //Show a checkbox next to non-exclusive group labels for toggling all
+  groupCheckboxes: false
+};
+
+
+function highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 4
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+
+}
+
+
+function resetHighlight(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: lineWeight
+    });
+    layer.bringToBack()
+
+}
+
+
+//add the layer groups to the map control using the new groupedlayers command added by the external code
+L.control.groupedLayers(basemaps, topLayers, options).addTo(map);
+
+var mbLegend = L.control({position: 'bottomright'});
+
+	mbLegend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'info legend'),
+			grades = [20,80,120,160,199,261],
+			key_labels = ['<20','<80','<120','<160','<200','more than 200'],
+			labels = ["<b>Meshblock Population</b><br>"],
+			from;
+			
+	for (var i = 0; i < grades.length; i++){
+		from = grades [i];		
+		labels.push(
+		'<i style = "background:' + getColor(from) + '"></i>' +
+			key_labels[i]);
+		}
+
+	div.innerHTML = labels.join('<br>');
+	return div;
+	};
+mbLegend.addTo(map);
+
+</script>
+</body>
+</html>
