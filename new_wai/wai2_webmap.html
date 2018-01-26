@@ -289,6 +289,7 @@ var turbidity = L.imageOverlay(imageUrl, imageBounds)
 	var map = L.map('map', {
     center: [-36.80, 175.1],
     zoom: 11.5,
+	minZoom: 10,
 	layers: [OpenMapSurfer_Grayscale, mbcl, mf, mr, makutuR]
 	});
 
@@ -333,26 +334,21 @@ var options = {
 
 function highlightFeature(e) {
     var layer = e.target;
-
     layer.setStyle({
         weight: 4
     });
-
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
-
 }
 
 
 function resetHighlight(e) {
     var layer = e.target;
-
     layer.setStyle({
         weight: lineWeight
     });
     layer.bringToBack()
-
 }
 
 
@@ -374,7 +370,6 @@ var mbLegend = L.control({position: 'bottomright'});
 		'<i style = "background:' + getColor(from) + '"></i>' +
 			key_labels[i]);
 		}
-
 	div.innerHTML = labels.join('<br>');
 	return div;
 	};
