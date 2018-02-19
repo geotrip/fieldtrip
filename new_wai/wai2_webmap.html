@@ -2,7 +2,7 @@
 <html>
 <head>
 	
-	<title>Waiheke Leaflet Map</title>
+	<title>Waiheke Lab Map</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,7 +80,7 @@
 </head>
 <body>
 <div id='map' style="width: 100%; height: 100%;"></div>
-<!-- <div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div> -->
+<!-- set like this to ensure the map takes up the enitre window -->
 <script src="MB.js" type="text/javascript"></script>
 <script src="riv.js" type="text/javascript"></script>
 <script src="MR.js" type="text/javascript"></script>
@@ -91,6 +91,10 @@
 <script src="ferry.js" type="text/javascript"></script>
 <script src="leaflet.groupedlayercontrol.js"></script>
 <script>
+
+//Made by ahol117
+
+
 //Set up attributions and links for the tilelayers (basemaps). Two are from Mapbox and use an ID, with a more up to date satelltie cover using the ESRI basemap. 
 //The leaflet provider demo (https://leaflet-extras.github.io/leaflet-providers/preview/) is a good source for basemaps.
 
@@ -107,12 +111,13 @@
 	});
 	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
-//I have set a custom opacity here to make the line features more easily visible
+
+//I have set a custom opacity here to make the line features more easily visible. Line thickness is a global variable to make it easy to change.
 var lineWeight = 1.5;
 var fillOpacity = 0.6;
 
 
-
+//Easy to use custom icons for point data, easy to find them online
 var toiletIcon = L.icon({
 		iconUrl: 'wc.svg',
 		iconSize: [14, 14],
@@ -135,6 +140,7 @@ var ferryIcon = L.icon({
 		popupAnchor: [0, -7]
 });
 
+//These are the steps used to colour the meshblocks and the legend entries
 function getColor(d) {
     return d < 20 ? '#00BF9F':
 			d < 40 ? '#00C267':
@@ -147,42 +153,40 @@ function getColor(d) {
 			d < 180 ? '#DD6000':
 			d <= 200 ? '#E11E00':
                       '#E50025';
-
-}
-function styleMb13(feature) {
-    return {
-    	weight: lineWeight,
-    	fillOpacity: fillOpacity,
-        color: getColor(feature.properties.Pop_13)
-    };
-}
-
-function styleMb06(feature) {
-    return {
-    	weight: lineWeight,
-    	fillOpacity: fillOpacity,
-        color: getColor(feature.properties.Pop_06)
-    };
-}
-
-function styleMb01(feature) {
-    return {
-    	weight: lineWeight,
-    	fillOpacity: fillOpacity,
-        color: getColor(feature.properties.Pop_01)
-    };
-}
-
-function stylecl(feature) {
-    return {
-    	weight: lineWeight,
-    	fillOpacity: 0,
-    	opacity: 0.2
-    };
-}
+    }
 
 
-	function onEachFeature(feature, layer) {
+
+//Style the meshblocks using the global variables specified above
+
+	function styleMb13(feature) {
+	    return {
+	    	weight: lineWeight,
+	    	fillOpacity: fillOpacity,
+	        color: getColor(feature.properties.Pop_13)
+	    };
+	}
+
+	function styleMb06(feature) {
+	    return {
+	    	weight: lineWeight,
+	    	fillOpacity: fillOpacity,
+	        color: getColor(feature.properties.Pop_06)
+	    };
+	}
+
+	function styleMb01(feature) {
+	    return {
+	    	weight: lineWeight,
+	    	fillOpacity: fillOpacity,
+	        color: getColor(feature.properties.Pop_01)
+	    };
+	}
+
+
+
+//This controls the behaviour of the meshblocks when they are interacted with, specifically the cursor moving inside and outside the polygon, and triggering a popup when clicked.
+function onEachFeature(feature, layer) {
 
 			layer.on({
 			mouseover: highlightFeature,
@@ -190,6 +194,7 @@ function stylecl(feature) {
 		});
 
 		var popupContent = 
+		//This just converts to sq km and rounds the result
 		"</b>Area: <b>" + ((feature.properties.Shape_Area)/1000000).toFixed(2) + " km<sup>2</sup></b>" +
 		"</b><br>Meshblock ID: <b>" + feature.properties.MBID +
 		"</b><br>2013 Population: <b>" + feature.properties.Pop_13 +
@@ -241,20 +246,44 @@ function stylecl(feature) {
 	}
 
 
+	//This highlights the meshblocks when they are moused over
+	function highlightFeature(e) {
+	    var layer = e.target;
+	    layer.setStyle({
+	        weight: 4
+	    });
+	    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+	        layer.bringToFront();
+	    }
+	}
+
+	//This resets the meshblock style when the cursor leaves
+	function resetHighlight(e) {
+	    var layer = e.target;
+	    layer.setStyle({
+	        weight: lineWeight
+	    });
+	    layer.bringToBack()
+	}
 
 
+//Add all the layers as variables
 
 var busRoutes = L.geoJSON(busroute);
+//Leaflet allows for dashed line styles, where the numbers represent the length of the gap and the length of the dash
 var waterways = L.geoJSON(rivers,{color: 'grey', dashArray: "5 5", weight: 1});
-var mbcl = L.geoJSON(mb, {onEachFeature: onEachFeature, style: stylecl});
+//add a clear layer (which is just empty)
+var mbcl = L.geoJSON();
 var mb13 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb13});
 var mb06 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb06});
 var mb01 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb01});
 var mf = L.geoJSON(marineFarm, {color: 'red', fillOpacity: fillOpacity, lineWeight: lineWeight});
 var mr = L.geoJSON(propMarine, {fillOpacity: fillOpacity, lineWeight: lineWeight, onEachFeature: onEachFeatureMR});
 var makutuR = L.geoJSON(makutu, {color: 'green', fillOpacity: fillOpacity, lineWeight: lineWeight, onEachFeature: onEachFeatureMR});
-var stops = L.geoJSON(busstop,{
 
+
+
+var stops = L.geoJSON(busstop,{
 		pointToLayer: function (feature, latlng) {
 			return L.marker(latlng, {icon: busIcon});
 		},
@@ -262,7 +291,6 @@ var stops = L.geoJSON(busstop,{
 	});
 
 var ferry = L.geoJSON(ferryPoints,{
-
 		pointToLayer: function (feature, latlng) {
 			return L.marker(latlng, {icon: ferryIcon});
 		},
@@ -286,10 +314,13 @@ var imageUrl = 'turb.png',
 
 var turbidity = L.imageOverlay(imageUrl, imageBounds)
 
-	var map = L.map('map', {
+
+//Add the actual map variable
+var map = L.map('map', {
     	center: [-36.80, 175.1],
     	zoom: 11.5,
-	minZoom: 11.5,
+		minZoom: 11.5,
+	//Set what layers are on by default when the map is first started
 	layers: [OpenMapSurfer_Grayscale, mbcl, mf, mr, makutuR]
 	});
 
@@ -309,7 +340,7 @@ var turbidity = L.imageOverlay(imageUrl, imageBounds)
 		"2006": mb06,
 		"2001": mb01		
 		},
-	"Other stuff":
+	"Overlays":
 	{
 		"<img src=wc.svg height=14 width=14> Toilets": toilet,
 		"<img src=ferry.svg height=14 width=14> Ferry Terminals": ferry,
@@ -323,7 +354,7 @@ var turbidity = L.imageOverlay(imageUrl, imageBounds)
 	}
 	};
 
-
+//This is the options for the exclusive layer control library, which is very useful for making maps more user freindly from a UI perspective
 var options = {
   //Make the meshblock display group exclusive (use radio inputs)
   exclusiveGroups: ["Meshblock Population Symbology Year"],
@@ -331,25 +362,6 @@ var options = {
   groupCheckboxes: false
 };
 
-
-function highlightFeature(e) {
-    var layer = e.target;
-    layer.setStyle({
-        weight: 4
-    });
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
-    }
-}
-
-
-function resetHighlight(e) {
-    var layer = e.target;
-    layer.setStyle({
-        weight: lineWeight
-    });
-    layer.bringToBack()
-}
 
 
 //add the layer groups to the map control using the new groupedlayers command added by the external code
@@ -373,7 +385,17 @@ var mbLegend = L.control({position: 'bottomright'});
 	div.innerHTML = labels.join('<br>');
 	return div;
 	};
-mbLegend.addTo(map);
+
+//This ensures that the legend is only visible when a meshblock overlay is being used, to prevent confusion.
+map.on('overlayadd', function (eventLayer) {
+   	if (eventLayer.name === "2001" || eventLayer.name === "2006" || eventLayer.name === "2013") {
+       mbLegend.addTo(map);
+   		}
+	else if (eventLayer.name === "Clear") {
+		this.removeControl(mbLegend);
+		}
+	});
+  
 
 </script>
 </body>
