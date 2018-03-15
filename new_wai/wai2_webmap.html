@@ -1,14 +1,13 @@
 <!DOCTYPE html>
+	<!-- 15th March. Small bug fixes, swapped the openstreetmap light theme for the mapbox eqiuvalent, which loads much faster. Changed the colours of the bus routes and waterway features to make them more legible
+	across the different basemaps. Updated legend to reflect these changes -->
 <html>
 <head>
 	
-	<title>Waiheke Lab Map</title>
-
+	<title>Waiheke Lab 1 Map</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-	
-
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
@@ -105,10 +104,11 @@
 
 	//Mutually exclusive base layers (only one on at a time)
 	var grayscaleDark  = L.tileLayer(mbUrl, {id: 'mapbox.dark', attribution: mbAttr});
-	var OpenMapSurfer_Grayscale = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roadsg/x={x}&y={y}&z={z}', {
-	maxZoom: 19,
-	attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	});
+	var grayscaleLight  = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr});
+	// var OpenMapSurfer_Grayscale = L.tileLayer('https://korona.geog.uni-heidelberg.de/tiles/roadsg/x={x}&y={y}&z={z}', {
+	// maxZoom: 19,
+	// attribution: 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	// });
 	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'});
 
@@ -117,7 +117,7 @@ var lineWeight = 1.5;
 var fillOpacity = 0.6;
 
 
-//Easy to use custom icons for point data, easy to find them online
+//Easy to use custom icons for point data, easy to find them online, but they made need to be attributed
 var toiletIcon = L.icon({
 		iconUrl: 'wc.svg',
 		iconSize: [14, 14],
@@ -269,9 +269,9 @@ function onEachFeature(feature, layer) {
 
 //Add all the layers as variables
 
-var busRoutes = L.geoJSON(busroute);
+var busRoutes = L.geoJSON(busroute,{color: '#feb24c'});
 //Leaflet allows for dashed line styles, where the numbers represent the length of the gap and the length of the dash
-var waterways = L.geoJSON(rivers,{color: 'grey', dashArray: "5 5", weight: 1});
+var waterways = L.geoJSON(rivers,{dashArray: "5 5", weight: 1.5});
 //add a clear layer (which is just empty)
 var mbcl = L.geoJSON();
 var mb13 = L.geoJSON(mb, {onEachFeature: onEachFeature, style: styleMb13});
@@ -321,7 +321,7 @@ var map = L.map('map', {
     	zoom: 11.5,
 		minZoom: 11.5,
 	//Set what layers are on by default when the map is first started
-	layers: [OpenMapSurfer_Grayscale, mbcl, mf, mr, makutuR]
+	layers: [grayscaleLight, mbcl, mf, mr, makutuR]
 	});
 
 	//This adds attributions which are not tied to a specific basemap
@@ -330,7 +330,7 @@ var map = L.map('map', {
 	var basemaps = {
 		"ESRI Satellite": Esri_WorldImagery,	
     	"Mapbox Dark": grayscaleDark,
-    	"Greyscale Light": OpenMapSurfer_Grayscale
+    	"Mapbox Light": grayscaleLight
 	};
 
 	var topLayers = {	
