@@ -89,13 +89,13 @@
 	var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
 			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="http://mapbox.com">Mapbox</a>' + ' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>',
-		mbUrl = 'https://api.mapbox.com/styles/v1/mapbox/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 // 		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
 
 	//Mutually exclusive base layers (only one on at a time)	
-	var grayscaleLight  = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr});
-	var grayscaleDark  = L.tileLayer(mbUrl, {id: 'mapbox.dark', attribution: mbAttr});
+	var grayscaleLight  = L.tileLayer(mbUrl, {id: 'mapbox/light-v10', attribution: mbAttr});
+	var grayscaleDark  = L.tileLayer(mbUrl, {id: 'mapbox/dark-v10', attribution: mbAttr});
 	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'+' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>', opacity: 0.7});
 //I have set a custom opacity here to make the line features more easily visible
