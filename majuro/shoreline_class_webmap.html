@@ -89,13 +89,9 @@
 	var mbAttr = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
 			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="http://mapbox.com">Mapbox</a>' + ' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>',
-		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-// 		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+		mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=';
+// 		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=';
 
-
-	//Mutually exclusive base layers (only one on at a time)	
-	var grayscaleLight  = L.tileLayer(mbUrl, {id: 'mapbox/light-v10', attribution: mbAttr});
-	var grayscaleDark  = L.tileLayer(mbUrl, {id: 'mapbox/dark-v10', attribution: mbAttr});
 	var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'+' | <a href="https://github.com/ismyrnow/leaflet-groupedlayercontrol">Grouped Layer Control by Ishmael Smyrnow</a>', opacity: 0.7});
 //I have set a custom opacity here to make the line features more easily visible
@@ -107,7 +103,7 @@ var lineWeight = 1.5;
 		zoom: 12,
 		maxZoom: 17,
 		minZoom: 12,
-		layers: [grayscaleLight]
+		layers: [Esri_WorldImagery]
 	});
 
 	// This is the info window thing. Didn't work very well, and only persisted when the cursor was held exactly over the line - which is tricky in this case. Best used for polygons instead.
@@ -329,9 +325,7 @@ function onEachFeature(feature, layer) {
 	var shorelineNo = L.geoJSON(shoreline_data, {onEachFeature: onEachFeature, color: 'red', weight: lineWeight}).addTo(map);
 
 	var basemaps = {
-		"ESRI Satellite": Esri_WorldImagery,		
-    	"Mapbox Light": grayscaleLight,
-    	"Mapbox Dark": grayscaleDark
+		"ESRI Satellite": Esri_WorldImagery
 	};
 
 // Adding the layers to the control
